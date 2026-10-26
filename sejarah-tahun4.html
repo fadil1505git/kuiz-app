@@ -494,7 +494,10 @@
                 </div>
             </div>
 
-            <button type="button" class="btn-submit" onclick="semakMarkah()">Hantar & Semak Markah Serta-Merta 🎯</button>
+            
+<button type="button" class="btn-submit" onclick="semakMarkah()">Hantar & Semak Markah Serta-Merta 🎯</button>
+<button type="button" class="btn-submit" style="background: #94a3b8; margin-top: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="if(confirm('Padam semua jawapan dan mula dari awal?')){ localStorage.removeItem('progress_' + window.location.pathname.split('/').pop()); location.reload(); }">Padam Jawapan & Mula Semula 🔄</button>
+
         </form>
     </div>
 
@@ -670,5 +673,57 @@
             window.scrollTo({ top: 350, behavior: 'smooth' });
         }
     </script>
+
+    <!-- AUTO-SAVE SCRIPT -->
+    <script>
+        const KUIZ_KEY = 'progress_' + window.location.pathname.split('/').pop();
+
+        function simpanProgress() {
+            const formData = {};
+            document.querySelectorAll('input[type="text"], textarea, select').forEach(el => {
+                if (el.id) formData[el.id] = el.value;
+            });
+            document.querySelectorAll('input[type="radio"]:checked').forEach(el => {
+                if (el.name) formData[el.name] = el.value;
+            });
+            localStorage.setItem(KUIZ_KEY, JSON.stringify(formData));
+        }
+
+        function muatProgress() {
+            const saved = localStorage.getItem(KUIZ_KEY);
+            if (saved) {
+                try {
+                    const formData = JSON.parse(saved);
+                    for (let key in formData) {
+                        const el = document.getElementById(key);
+                        if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT')) {
+                            el.value = formData[key];
+                        } else {
+                            const radios = document.getElementsByName(key);
+                            for (let r of radios) {
+                                if (r.value === formData[key]) r.checked = true;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error("Ralat memuatkan progress", e);
+                }
+            }
+            
+            // Pasang event listener untuk simpan automatik
+            document.querySelectorAll('input, textarea, select').forEach(el => {
+                el.addEventListener('change', simpanProgress);
+                if (el.type === 'text' || el.tagName.toLowerCase() === 'textarea') {
+                    el.addEventListener('input', simpanProgress);
+                }
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // Beri sedikit masa untuk elemen dinamik dijana
+            setTimeout(muatProgress, 200);
+        });
+    </script>
 </body>
+
 </html>
