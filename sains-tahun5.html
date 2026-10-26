@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sains Tahun 5 - UASA (Semakan & Markah Automatik)</title>
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --accent: #ec4899;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #f5f3ff;
+            --text: #1f2937;
+        }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #ddd6fe 0%, #fbcfe8 100%);
+            color: var(--text);
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 860px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 35px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 14px;
+        }
+        .nav-back:hover { text-decoration: underline; }
+        .header {
+            text-align: center;
+            border-bottom: 3px dashed var(--primary);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            color: var(--primary);
+            font-size: 2.2em;
+            margin: 0 0 5px 0;
+            font-weight: 900;
+        }
+        .header p {
+            color: #6b7280;
+            margin: 0;
+            font-weight: bold;
+        }
+        .info-box {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .info-box input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            outline: none;
+        }
+        .info-box input:focus { border-color: var(--primary); }
+        .section-title {
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 1.25em;
+            font-weight: 900;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .question-card {
+            background: white;
+            border-left: 5px solid var(--primary);
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.04);
+            transition: transform 0.2s;
+        }
+        .question-card p {
+            margin: 0 0 10px 0;
+            font-weight: 800;
+            font-size: 1.05em;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+        .diagram-hint {
+            display: inline-block;
+            background: #ede9fe;
+            color: #6d28d9;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.88em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .options-list label {
+            display: block;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.98em;
+            font-weight: 600;
+        }
+        .options-list label:hover {
+            border-color: var(--primary);
+            background: #f5f3ff;
+        }
+        input[type="radio"] {
+            transform: scale(1.2);
+            margin-right: 10px;
+            accent-color: var(--primary);
+        }
+        select, input[type="text"], textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1em;
+            box-sizing: border-box;
+            outline: none;
+            margin-top: 6px;
+        }
+        select:focus, input[type="text"]:focus, textarea:focus {
+            border-color: var(--primary);
+        }
+        .feedback-box {
+            display: none;
+            margin-top: 10px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.92em;
+            font-weight: bold;
+        }
+        .feedback-correct {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid var(--success);
+        }
+        .feedback-wrong {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid var(--danger);
+        }
+        .skema-jawapan {
+            display: none;
+            background: #eff6ff;
+            color: #1e40af;
+            border-left: 4px solid #3b82f6;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.92em;
+            line-height: 1.5;
+        }
+        .btn-submit {
+            background: linear-gradient(45deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: 900;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 35px;
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.35);
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-submit:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 25px rgba(139, 92, 246, 0.5);
+        }
+        /* Modal Skor */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-card {
+            background: white;
+            padding: 35px;
+            border-radius: 24px;
+            text-align: center;
+            max-width: 440px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-sizing: border-box;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.6); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 15px auto;
+            box-shadow: 0 8px 18px rgba(139, 92, 246, 0.4);
+        }
+        .score-number {
+            font-size: 2.3em;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .score-total {
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+        .grade-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 1.1em;
+            margin-bottom: 12px;
+        }
+        .grade-A { background: #dcfce7; color: #15803d; }
+        .grade-B { background: #dbeafe; color: #1d4ed8; }
+        .grade-C { background: #fef3c7; color: #b45309; }
+        .grade-D { background: #fee2e2; color: #b91c1c; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="nav-back">⬅ Kembali ke Portal Utama</a>
+        <div class="header">
+            <h1>🔬 Sains Tahun 5 (UASA)</h1>
+            <p>Ujian Akhir Sesi Akademik — Semakan & Markah Automatik Serta-Merta</p>
+        </div>
+
+        <div class="info-box">
+            <input type="text" id="namaMurid" placeholder="🙋 Nama Murid" required>
+            <input type="text" id="kelasMurid" placeholder="🏫 Kelas" required>
+        </div>
+
+        <form id="quizForm">
+            <!-- BAHAGIAN A (10 MARKAH) -->
+            <div class="section-title">
+                <span>Bahagian A: Soalan Objektif</span>
+                <span>10 Markah</span>
+            </div>
+            <div id="bahagianA-container"></div>
+
+            <!-- BAHAGIAN B (8 MARKAH) -->
+            <div class="section-title">
+                <span>Bahagian B: Soalan Berstruktur</span>
+                <span>8 Markah</span>
+            </div>
+
+            <!-- SOALAN B1: KEADAAN JIRIM -->
+            <div class="question-card" id="card-b1">
+                <p><strong>1. (a) Rajah 1 menunjukkan perubahan keadaan jirim (Pepejal ➔ Cecair ➔ Gas). Padankan proses P dan Q (2 Markah):</strong></p>
+                <div style="margin-bottom: 10px;">
+                    Proses P (Pepejal ➔ Cecair):
+                    <select id="b1_p" onchange="playPopSound()">
+                        <option value="">-- Pilih Proses --</option>
+                        <option value="Proses Peleburan">Proses Peleburan</option>
+                        <option value="Proses Pembekuan">Proses Pembekuan</option>
+                        <option value="Proses Kondensasi">Proses Kondensasi</option>
+                    </select>
+                    <div class="feedback-box" id="fb_b1_p"></div>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    Proses Q (Cecair ➔ Pepejal):
+                    <select id="b1_q" onchange="playPopSound()">
+                        <option value="">-- Pilih Proses --</option>
+                        <option value="Proses Pembekuan">Proses Pembekuan</option>
+                        <option value="Proses Peleburan">Proses Peleburan</option>
+                        <option value="Proses Kondensasi">Proses Kondensasi</option>
+                    </select>
+                    <div class="feedback-box" id="fb_b1_q"></div>
+                </div>
+
+                <p style="margin-top:15px;"><strong>(b) Tandakan (✔) bagi ciri-ciri suatu pepejal (2 Markah):</strong></p>
+                <div class="options-list">
+                    <label><input type="checkbox" id="b1_c1" onclick="playPopSound()"> Mempunyai bentuk yang tetap</label>
+                    <label><input type="checkbox" id="b1_c2" onclick="playPopSound()"> Mengambil bentuk bekas</label>
+                    <label><input type="checkbox" id="b1_c3" onclick="playPopSound()"> Tidak mempunyai jisim</label>
+                    <label><input type="checkbox" id="b1_c4" onclick="playPopSound()"> Memenuhi ruang</label>
+                </div>
+                <div class="feedback-box" id="fb_b1_chk"></div>
+            </div>
+
+            <!-- SOALAN B2: MESIN RINGKAS & LESTARI -->
+            <div class="question-card" id="card-b2">
+                <p><strong>2. (a) Rajah 2 menunjukkan pengasah pensel mekanikal. Labelkan mesin ringkas X dan Y (2 Markah):</strong></p>
+                <span class="diagram-hint">💡 Pilihan: Tuas, Baji, Takal, Roda dan Gandar</span>
+                <div style="margin-bottom: 10px;">
+                    Mesin ringkas X (pemegang engkol pemutar):
+                    <select id="b2_x" onchange="playPopSound()">
+                        <option value="">-- Pilih Mesin Ringkas --</option>
+                        <option value="Roda dan Gandar">Roda dan Gandar</option>
+                        <option value="Tuas">Tuas</option>
+                        <option value="Baji">Baji</option>
+                        <option value="Takal">Takal</option>
+                    </select>
+                    <div class="feedback-box" id="fb_b2_x"></div>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    Mesin ringkas Y (mata pemotong berputar di dalam):
+                    <select id="b2_y" onchange="playPopSound()">
+                        <option value="">-- Pilih Mesin Ringkas --</option>
+                        <option value="Baji">Baji</option>
+                        <option value="Tuas">Tuas</option>
+                        <option value="Takal">Takal</option>
+                        <option value="Roda dan Gandar">Roda dan Gandar</option>
+                    </select>
+                    <div class="feedback-box" id="fb_b2_y"></div>
+                </div>
+
+                <p style="margin-top:15px;"><strong>(b) Nyatakan dua ciri-ciri penciptaan alat yang lestari (2 Markah):</strong></p>
+                <textarea rows="2" placeholder="Tuliskan dua ciri alat lestari..."></textarea>
+                <div class="skema-jawapan" id="skema_b2">
+                    <strong>💡 Skema Cadangan Jawapan:</strong> (1) Tahan lama / tidak mudah rosak, (2) Kos efektif / menjimatkan kos, (3) Selamat digunakan, (4) Mesra alam / tidak mencemarkan alam, (5) Menjimatkan masa dan tenaga.
+                </div>
+            </div>
+
+            <!-- BAHAGIAN C (32 MARKAH) -->
+            <div class="section-title">
+                <span>Bahagian C: Soalan Subjektif & Eksperimen</span>
+                <span>32 Markah</span>
+            </div>
+
+            <!-- SOALAN C1: LITAR ELEKTRIK -->
+            <div class="question-card" id="card-c1">
+                <p><strong>1. Penyiasatan Kecerahan Mentol (Jadual: 1 sel = Malap, 2 sel = Cerah, 3 sel = Sangat cerah):</strong></p>
+                <div style="margin-bottom:8px;">
+                    (a) i. Pemboleh ubah dimanipulasi:
+                    <select id="c1_pm" onchange="playPopSound()">
+                        <option value="">-- Pilih --</option>
+                        <option value="Bilangan sel kering">Bilangan sel kering</option>
+                        <option value="Kecerahan mentol">Kecerahan mentol</option>
+                        <option value="Bilangan mentol">Bilangan mentol</option>
+                    </select>
+                    <div class="feedback-box" id="fb_c1_pm"></div>
+                </div>
+                <div style="margin-bottom:8px;">
+                    (a) ii. Pemboleh ubah bergerak balas:
+                    <select id="c1_pb" onchange="playPopSound()">
+                        <option value="">-- Pilih --</option>
+                        <option value="Kecerahan mentol">Kecerahan mentol</option>
+                        <option value="Bilangan sel kering">Bilangan sel kering</option>
+                        <option value="Jenis litar">Jenis litar</option>
+                    </select>
+                    <div class="feedback-box" id="fb_c1_pb"></div>
+                </div>
+                <div style="margin-bottom:8px;">
+                    (a) iii. Pemboleh ubah dimalarkan:
+                    <select id="c1_pd" onchange="playPopSound()">
+                        <option value="">-- Pilih --</option>
+                        <option value="Bilangan mentol / jenis litar">Bilangan mentol / jenis litar</option>
+                        <option value="Bilangan sel kering">Bilangan sel kering</option>
+                        <option value="Kecerahan mentol">Kecerahan mentol</option>
+                    </select>
+                    <div class="feedback-box" id="fb_c1_pd"></div>
+                </div>
+                <p style="margin-top:12px;">(b) Apakah hipotesis bagi penyiasatan ini? (1 Markah)</p>
+                <textarea rows="2" placeholder="Tulis hipotesis..."></textarea>
+                <div class="skema-jawapan" id="skema_c1b">
+                    <strong>💡 Skema Cadangan Jawapan:</strong> Semakin bertambah bilangan sel kering, semakin bertambah kecerahan mentol.
+                </div>
+                <p style="margin-top:12px;">(c) Ramalkan kecerahan mentol apabila litar ditambah 5 biji sel kering & jelaskan: (2 Markah)</p>
+                <textarea rows="2" placeholder="Ramalan & penjelasan..."></textarea>
+                <div class="skema-jawapan" id="skema_c1c">
+                    <strong>💡 Skema Cadangan Jawapan:</strong> Mentol menyala sangat cerah seketika kemudian padam / terbakar kerana menerima arus elektrik / voltan yang terlalu tinggi.
+                </div>
+                <p style="margin-top:12px;">(d) Berikan dua kesan kecuaian pengendalian peralatan elektrik: (2 Markah)</p>
+                <textarea rows="2" placeholder="Kesan kecuaian..."></textarea>
+                <div class="skema-jawapan" id="skema_c1d">
+                    <strong>💡 Skema Cadangan Jawapan:</strong> (1) Renjatan elektrik, (2) Kebakaran / litar pintas, (3) Melecur pada anggota badan.
+                </div>
+            </div>
+
+            <!-- SOALAN C2: HABA & KABEL ELEKTRIK -->
+            <div class="question-card" id="card-c2">
+                <p><strong>2. Haba, Pengembangan & Pengecutan:</strong></p>
+                <p>(a) i. Mengapakah kabel elektrik dipasang secara kendur? (1 Markah)</p>
+                <textarea rows="2" placeholder="Tulis alasan..."></textarea>
+                <div class="skema-jawapan" id="skema_c2a1">
+                    <strong>💡 Skema Cadangan Jawapan:</strong> Untuk memberi ruang kabel mengecut pada waktu malam / cuaca sejuk tanpa terputus.
+                </div>
+
+                <p style="margin-top:12px;">(a) ii. Apakah berlaku jika kabel elektrik dipasang terlalu tegang? (1 Markah)</p>
+                <textarea rows="2" placeholder="Tulis kesan..."></textarea>
+                <div class="skema-jawapan" id="skema_c2a2">
+                    <strong>💡 Skema Cadangan Jawapan:</strong> Kabel elektrik akan menegang dan putus apabila mengecut pada waktu malam atau cuaca sejuk.
+                </div>
+
+                <p style="margin-top:12px;">(b) Maryam ingin membuka penutup botol kaca yang ketat: (2 Markah)</p>
+                <div style="margin-bottom:8px;">
+                    Cara yang betul:
+                    <select id="c2_b" onchange="playPopSound()">
+                        <option value="">-- Pilih Cara --</option>
+                        <option value="Cara 1: Rendam penutup dalam air panas">Cara 1: Rendam penutup dalam air panas</option>
+                        <option value="Cara 2: Rendam penutup dalam air sejuk">Cara 2: Rendam penutup dalam air sejuk</option>
+                    </select>
+                    <div class="feedback-box" id="fb_c2_b"></div>
+                </div>
+                <textarea rows="2" placeholder="Berikan alasan bagi pilihan anda..."></textarea>
+                <div class="skema-jawapan" id="skema_c2b_alasan">
+                    <strong>💡 Alasan:</strong> Penutup botol logam mengembang apabila menerima haba dari air panas dan menjadi longgar untuk dibuka.
+                </div>
+
+                <p style="margin-top:12px;">(c) Pemanasan air selama 25 minit (Suhu: 29°C ➔ 38°C ➔ 50°C ➔ 65°C ➔ 84°C ➔ 100°C):</p>
+                <div style="margin-bottom:8px;">
+                    i. Alat mengukur suhu:
+                    <select id="c2_c1" onchange="playPopSound()">
+                        <option value="">-- Pilih Alat --</option>
+                        <option value="Termometer">Termometer</option>
+                        <option value="Bikar">Bikar</option>
+                        <option value="Penunu Bunsen">Penunu Bunsen</option>
+                    </select>
+                    <div class="feedback-box" id="fb_c2_c1"></div>
+                </div>
+                <div style="margin-bottom:8px;">
+                    ii. Corak perubahan suhu air:
+                    <select id="c2_c2" onchange="playPopSound()">
+                        <option value="">-- Pilih Corak --</option>
+                        <option value="Meningkat">Meningkat / Bertambah</option>
+                        <option value="Menurun">Menurun / Berkurang</option>
+                        <option value="Tidak berubah">Tidak berubah</option>
+                    </select>
+                    <div class="feedback-box" id="fb_c2_c2"></div>
+                </div>
+                <div style="margin-bottom:8px;">
+                    iv. Ramalan suhu air pada minit ke-30:
+                    <select id="c2_c4" onchange="playPopSound()">
+                        <option value="">-- Pilih Suhu --</option>
+                        <option value="100°C">100°C (takat didih air adalah malar)</option>
+                        <option value="115°C">115°C</option>
+                        <option value="120°C">120°C</option>
+                    </select>
+                    <div class="feedback-box" id="fb_c2_c4"></div>
+                </div>
+            </div>
+
+            <!-- SOALAN C3: FASA BULAN & BURUJ -->
+            <div class="question-card" id="card-c3">
+                <p><strong>3. Fasa Bulan dan Buruj (Rajah 4 & 5):</strong></p>
+                <div style="margin-bottom:8px;">
+                    (a) Nyatakan Fasa Bulan X dan Y:
+                    <select id="c3_xy" onchange="playPopSound()">
+                        <option value="">-- Pilih Fasa Bulan --</option>
+                        <option value="X: Anak bulan, Y: Bulan purnama">X: Anak bulan, Y: Bulan purnama</option>
+                        <option value="X: Bulan sabit, Y: Bulan separa">X: Bulan sabit, Y: Bulan separa</option>
+                    </select>
+                    <div class="feedback-box" id="fb_c3_xy"></div>
+                </div>
+                <p>(b) Bagaimanakah fasa bulan boleh berlaku? (1 Markah)</p>
+                <textarea rows="2" placeholder="Tulis sebab fasa bulan berlaku..."></textarea>
+                <div class="skema-jawapan" id="skema_c3b">
+                    <strong>💡 Skema Cadangan Jawapan:</strong> Bulan tidak mengeluarkan cahaya sendiri tetapi memantulkan cahaya matahari ke Bumi semasa beredar mengelilingi Bumi pada orbitnya.
+                </div>
+
+                <div style="margin-top:12px; margin-bottom:8px;">
+                    (d) ii. Kegunaan Buruj B (Belantik):
+                    <select id="c3_b_kegunaan" onchange="playPopSound()">
+                        <option value="">-- Pilih Kegunaan --</option>
+                        <option value="Menunjukkan arah kiblat / arah Utara">Menunjukkan arah kiblat / arah Utara / petunjuk musim menanam</option>
+                        <option value="Menunjukkan waktu siang">Menunjukkan waktu siang</option>
+                    </select>
+                    <div class="feedback-box" id="fb_c3_b_kegunaan"></div>
+                </div>
+                <p>(d) iv. Mengapakah buruj kadang-kadang tidak kelihatan pada waktu malam? (1 Markah)</p>
+                <textarea rows="2" placeholder="Tulis sebab buruj tidak kelihatan..."></textarea>
+                <div class="skema-jawapan" id="skema_c3d4">
+                    <strong>💡 Skema Cadangan Jawapan:</strong> Langit diliputi awan tebal / cuaca mendung atau hujan / terdapat pencemaran cahaya yang terang dari lampu bandar.
+                </div>
+            </div>
+
+            <!-- SOALAN C4: PENGARATAN -->
+            <div class="question-card" id="card-c4">
+                <p><strong>4. Faktor Pengaratan (Paku dalam tabung uji M, N, O, P):</strong></p>
+                <div style="margin-bottom:8px;">
+                    (a) Pemerhatian selepas seminggu:
+                    <select id="c4_a" onchange="playPopSound()">
+                        <option value="">-- Pilih Pemerhatian --</option>
+                        <option value="Hanya paku dalam tabung uji N yang berkarat">Hanya paku dalam tabung uji N yang berkarat (ada air dan udara)</option>
+                        <option value="Semua paku berkarat">Semua paku berkarat</option>
+                        <option value="Tiada paku yang berkarat">Tiada paku yang berkarat</option>
+                    </select>
+                    <div class="feedback-box" id="fb_c4_a"></div>
+                </div>
+                <div style="margin-bottom:8px;">
+                    (c) Kegunaan kalsium klorida kontang dalam tabung uji P:
+                    <select id="c4_c" onchange="playPopSound()">
+                        <option value="">-- Pilih Kegunaan --</option>
+                        <option value="Menyerap kelembapan / wap air dalam udara">Menyerap kelembapan / wap air dalam udara</option>
+                        <option value="Mencegah udara daripada masuk">Mencegah udara daripada masuk</option>
+                    </select>
+                    <div class="feedback-box" id="fb_c4_c"></div>
+                </div>
+                <div style="margin-bottom:8px;">
+                    (d) Kesimpulan faktor pengaratan:
+                    <select id="c4_d" onchange="playPopSound()">
+                        <option value="">-- Pilih Kesimpulan --</option>
+                        <option value="Pengaratan memerlukan kehadiran air dan udara serentak">Pengaratan memerlukan kehadiran air dan udara serentak</option>
+                        <option value="Pengaratan hanya memerlukan air sahaja">Pengaratan hanya memerlukan air sahaja</option>
+                    </select>
+                    <div class="feedback-box" id="fb_c4_d"></div>
+                </div>
+                <p style="margin-top:12px;">(e) ii. Cadangkan satu cara mencegah pengaratan pada tangga besi & kepentingannya: (3 Markah)</p>
+                <textarea rows="2" placeholder="Cara mencegah & kepentingan..."></textarea>
+                <div class="skema-jawapan" id="skema_c4e">
+                    <strong>💡 Skema Cadangan Jawapan:</strong><br>
+                    • <strong>Cara Mencegah:</strong> Mengecat permukaan tangga besi / menyadur dengan logam tahan karat / menyapu minyak.<br>
+                    • <strong>Kepentingan Mencegah Pengaratan:</strong> Menjadikan struktur tangga selamat digunakan, tahan lebih lama, menjimatkan kos membaiki atau mengganti baharu.
+                </div>
+            </div>
+
+            <button type="button" class="btn-submit" onclick="semakMarkah()">Hantar & Semak Markah Serta-Merta 🎯</button>
+            <button type="button" class="btn-submit" style="background: #94a3b8; margin-top: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="if(confirm('Padam semua jawapan dan mula dari awal?')){ localStorage.removeItem('progress_' + window.location.pathname.split('/').pop()); location.reload(); }">Padam Jawapan & Mula Semula 🔄</button>
+        </form>
+    </div>
+
+    <!-- MODAL PAPARAN MARKAH -->
+    <div id="resultModal" class="modal">
+        <div class="modal-card">
+            <h2 id="modalTitle" style="color:var(--primary); margin:0 0 10px 0;">Keputusan Pentaksiran Sains</h2>
+            <div class="score-circle">
+                <span class="score-number" id="skorBesar">0</span>
+                <span class="score-total">/ 25 Markah Objektif & Struktur</span>
+            </div>
+            <div id="gradeBadge" class="grade-badge grade-A">Gred A</div>
+            <p id="peratusText" style="font-weight: bold; color: #4b5563; margin: 5px 0 15px 0;">Peratusan: 0%</p>
+            <p id="pesananText" style="font-size: 0.95em; color: #64748b; line-height: 1.4; margin-bottom: 20px;">Hebat!</p>
+            <button class="btn-submit" style="margin: 0; padding: 12px 25px; font-size: 1.1em;" onclick="tutupModal()">Lihat Semakan Jawapan & Skema 🔎</button>
+        </div>
+    </div>
+
+    <script>
+        // DATA SOALAN BAHAGIAN A
+        const dataA = [
+            { no: 1, q: "Jadual 1 menunjukkan masa diambil untuk kiub ais melebur. Apakah pembolehubah dimanipulasi?", opt: ["A. Saiz kiub ais", "B. Masa yang diambil untuk melebur dengan sepenuhnya", "C. Bilangan kiub ais", "D. Tempat penyiasatan"], ans: "A" },
+            { no: 2, q: "Rajah 1 menunjukkan seorang budak menari. Apakah yang dimaksudkan dengan sendi?", opt: ["A. Tulang belakang yang memberi sokongan kepada tubuh", "B. Tempat pertemuan dua atau lebih tulang", "C. Otot di pergelangan tangan atau kaki", "D. Salur darah dalam organ dalaman manusia"], ans: "B" },
+            { no: 3, q: "Ciri haiwan: Mempunyai sisik keras dan menggulungkan diri. Antara berikut yang manakah haiwan tersebut?", opt: ["A. Ikan", "B. Landak", "C. Buaya", "D. Tenggiling"], ans: "D" },
+            { no: 4, q: "Rajah 2 menunjukkan bunga Rafflesia (pakma). Mengapakah haiwan tidak mendekatinya?", opt: ["A. Mengeluarkan getah", "B. Mengeluarkan racun", "C. Mempunyai bulu halus", "D. Mengeluarkan bau yang busuk"], ans: "D" },
+            { no: 5, q: "Rajah 3 menunjukkan litar bersiri dengan mentol K dan L. Apakah berlaku jika mentol K terbakar?", opt: ["A. Tiada mentol akan menyala", "B. Kedua-dua mentol masih menyala", "C. Kecerahan mentol L berkurang", "D. Kecerahan mentol L bertambah"], ans: "A" },
+            { no: 6, q: "Sudu besi dalam secawan air panas turut menjadi panas selepas beberapa minit. Mengapa?", opt: ["A. Suhu sudu menurun kerana menerima haba", "B. Suhu sudu meningkat kerana kehilangan haba", "C. Haba dari tempat panas mengalir ke tempat sejuk", "D. Haba dari tempat sejuk mengalir ke tempat panas"], ans: "C" },
+            { no: 7, q: "Puan Harlina mendapati sudu di dapur rumahnya berkarat. Apakah jenis bahan sudu itu?", opt: ["A. Besi", "B. Kayu", "C. Getah", "D. Plastik"], ans: "A" },
+            { no: 8, q: "Rajah 4 menunjukkan titisan air terbentuk pada dinding luar gelas berisi jus oren sejuk. Proses apakah ini?", opt: ["A. Peleburan", "B. Penyejatan", "C. Kondensasi", "D. Pembekuan"], ans: "C" },
+            { no: 9, q: "Mengapakah Bulan kelihatan bercahaya pada waktu malam?", opt: ["A. Bulan membiaskan cahaya matahari", "B. Bulan memantulkan cahaya matahari", "C. Bulan mengeluarkan cahaya sendiri", "D. Bulan bersifat legap"], ans: "B" },
+            { no: 10, q: "Mesin kompleks: Terdiri daripada gabungan tuas dan baji, digunakan untuk memotong kertas:", opt: ["A. Jam tangan", "B. Kereta sorong", "C. Pemotong kertas berlengan (paper cutter)", "D. Pengasah pensel mekanikal"], ans: "C" }
+        ];
+
+        // JANA BAHAGIAN A
+        const containerA = document.getElementById('bahagianA-container');
+        dataA.forEach((item) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            let html = `<p>${item.no}. ${item.q}</p><div class="options-list">`;
+            item.opt.forEach((optText) => {
+                const val = optText.charAt(0);
+                html += `<label><input type="radio" name="soalanA_${item.no}" value="${val}" onclick="playPopSound()"> ${optText}</label>`;
+            });
+            html += `</div><div class="feedback-box" id="fb_a${item.no}"></div>`;
+            card.innerHTML = html;
+            containerA.appendChild(card);
+        });
+
+        // AUDIO
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+        function initAudio() { if (!audioCtx) audioCtx = new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
+
+        function playPopSound() {
+            initAudio();
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(420, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(650, audioCtx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.08);
+        }
+
+        function playVictorySound() {
+            initAudio();
+            const notes = [523, 659, 784, 1046];
+            let startTime = audioCtx.currentTime;
+            notes.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                osc.type = 'triangle'; osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.12, startTime + (i * 0.12));
+                gain.gain.setTargetAtTime(0, startTime + (i * 0.12) + 0.12, 0.12);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(startTime + (i * 0.12)); osc.stop(startTime + (i * 0.12) + 0.5);
+            });
+        }
+
+        // SEMAKAN MARKAH AUTOMATIK
+        function semakMarkah() {
+            let skor = 0;
+            const totalObjektif = 25; // 10 Bahagian A + 15 soalan struktur berformat objektif
+
+            // 1. Bahagian A (10 Markah)
+            dataA.forEach(item => {
+                const radios = document.getElementsByName(`soalanA_${item.no}`);
+                let chosen = "";
+                for (let r of radios) { if (r.checked) chosen = r.value; }
+                const fb = document.getElementById(`fb_a${item.no}`);
+                fb.style.display = "block";
+                if (chosen === item.ans) {
+                    skor++;
+                    fb.className = "feedback-box feedback-correct";
+                    fb.innerHTML = `✔ Tepat! Jawapan anda (${chosen}) betul. (+1 Markah)`;
+                } else {
+                    fb.className = "feedback-box feedback-wrong";
+                    fb.innerHTML = `✖ Salah. Jawapan yang betul ialah: <strong>${item.ans}</strong>`;
+                }
+            });
+
+            // 2. Bahagian B & C (Kunci Jawapan Berstruktur)
+            const skemaStruktur = {
+                b1_p: "Proses Peleburan",
+                b1_q: "Proses Pembekuan",
+                b2_x: "Roda dan Gandar",
+                b2_y: "Baji",
+                c1_pm: "Bilangan sel kering",
+                c1_pb: "Kecerahan mentol",
+                c1_pd: "Bilangan mentol / jenis litar",
+                c2_b: "Cara 1: Rendam penutup dalam air panas",
+                c2_c1: "Termometer",
+                c2_c2: "Meningkat",
+                c2_c4: "100°C",
+                c3_xy: "X: Anak bulan, Y: Bulan purnama",
+                c3_b_kegunaan: "Menunjukkan arah kiblat / arah Utara",
+                c4_a: "Hanya paku dalam tabung uji N yang berkarat",
+                c4_c: "Menyerap kelembapan / wap air dalam udara",
+                c4_d: "Pengaratan memerlukan kehadiran air dan udara serentak"
+            };
+
+            for (let [id, ans] of Object.entries(skemaStruktur)) {
+                const el = document.getElementById(id);
+                const fb = document.getElementById(`fb_${id}`);
+                if (el && fb) {
+                    fb.style.display = "block";
+                    if (el.value.trim() === ans) {
+                        skor++;
+                        fb.className = "feedback-box feedback-correct";
+                        fb.innerHTML = `✔ Betul! (+1 Markah)`;
+                    } else {
+                        fb.className = "feedback-box feedback-wrong";
+                        fb.innerHTML = `✖ Salah. Jawapan sebenar: <strong>${ans}</strong>`;
+                    }
+                }
+            }
+
+            // Semak checkbox pepejal (b1)
+            const c1 = document.getElementById('b1_c1').checked;
+            const c2 = document.getElementById('b1_c2').checked;
+            const c3 = document.getElementById('b1_c3').checked;
+            const c4 = document.getElementById('b1_c4').checked;
+            const fbChk = document.getElementById('fb_b1_chk');
+            fbChk.style.display = "block";
+            if (c1 && !c2 && !c3 && c4) {
+                skor++;
+                fbChk.className = "feedback-box feedback-correct";
+                fbChk.innerHTML = `✔ Tepat! Ciri pepejal: Mempunyai bentuk tetap & memenuhi ruang. (+1 Markah)`;
+            } else {
+                fbChk.className = "feedback-box feedback-wrong";
+                fbChk.innerHTML = `✖ Jawapan tepat ialah: 'Mempunyai bentuk yang tetap' dan 'Memenuhi ruang'.`;
+            }
+
+            // Paparkan semua skema jawapan subjektif KBAT
+            document.querySelectorAll('.skema-jawapan').forEach(el => el.style.display = 'block');
+
+            // Hitung Peratus
+            const peratus = Math.round((skor / totalObjektif) * 100);
+            document.getElementById('skorBesar').innerText = skor;
+            document.getElementById('peratusText').innerText = `Peratusan: ${peratus}% (${skor} / ${totalObjektif} Markah Objektif/Struktur)`;
+
+            const badge = document.getElementById('gradeBadge');
+            const pesan = document.getElementById('pesananText');
+
+            if (peratus >= 80) {
+                badge.className = "grade-badge grade-A"; badge.innerText = "Gred A — Cemerlang! 🌟";
+                pesan.innerText = "Syabas! Penguasaan konsep Sains Tahun 5 anak anda sangat hebat dan mantap!";
+                confetti({ particleCount: 70, spread: 75, origin: { y: 0.6 } });
+            } else if (peratus >= 65) {
+                badge.className = "grade-badge grade-B"; badge.innerText = "Gred B — Baik 👍";
+                pesan.innerText = "Bagus! Teruskan latihan untuk soalan eksperimen dan KBAT.";
+            } else if (peratus >= 50) {
+                badge.className = "grade-badge grade-C"; badge.innerText = "Gred C — Lulus ✅";
+                pesan.innerText = "Lulus. Rujuk skema cadangan jawapan di bawah untuk pembetulan.";
+            } else {
+                badge.className = "grade-badge grade-D"; badge.innerText = "Perlu Bimbingan 🔬";
+                pesan.innerText = "Jangan putus asa! Ulang kaji konsep sains melalui skema jawapan di bawah.";
+            }
+
+            playVictorySound();
+            document.getElementById('resultModal').style.display = 'flex';
+        }
+
+        function tutupModal() {
+            document.getElementById('resultModal').style.display = 'none';
+            window.scrollTo({ top: 320, behavior: 'smooth' });
+        }
+    </script>
+
+    <!-- AUTO-SAVE SCRIPT -->
+    <script>
+        const KUIZ_KEY = 'progress_' + window.location.pathname.split('/').pop();
+
+        function simpanProgress() {
+            const formData = {};
+            document.querySelectorAll('input[type="text"], textarea, select').forEach(el => {
+                if (el.id) formData[el.id] = el.value;
+            });
+            document.querySelectorAll('input[type="radio"]:checked, input[type="checkbox"]:checked').forEach(el => {
+                if (el.id) formData[el.id] = true;
+                if (el.name) formData[el.name] = el.value;
+            });
+            localStorage.setItem(KUIZ_KEY, JSON.stringify(formData));
+        }
+
+        function muatProgress() {
+            const saved = localStorage.getItem(KUIZ_KEY);
+            if (saved) {
+                try {
+                    const formData = JSON.parse(saved);
+                    for (let key in formData) {
+                        const el = document.getElementById(key);
+                        if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT')) {
+                            if (el.type === 'checkbox') el.checked = formData[key];
+                            else el.value = formData[key];
+                        } else {
+                            const radios = document.getElementsByName(key);
+                            for (let r of radios) {
+                                if (r.value === formData[key]) r.checked = true;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error("Ralat memuatkan progress", e);
+                }
+            }
+            
+            document.querySelectorAll('input, textarea, select').forEach(el => {
+                el.addEventListener('change', simpanProgress);
+                if (el.type === 'text' || el.tagName.toLowerCase() === 'textarea') {
+                    el.addEventListener('input', simpanProgress);
+                }
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(muatProgress, 200);
+        });
+    </script>
+</body>
+</html>

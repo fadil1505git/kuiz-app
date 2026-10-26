@@ -17,6 +17,7 @@
             --accent: #4ecdc4; 
             --islamic: #059669;
             --blue: #0284c7;
+            --purple: #8b5cf6;
         }
         body { 
             font-family: 'Nunito', system-ui, sans-serif; 
@@ -70,7 +71,7 @@
         }
         
         .container { 
-            max-width: 1050px; 
+            max-width: 1100px; 
             margin: 25px auto; 
             padding: 0 20px; 
         }
@@ -200,7 +201,7 @@
         }
         .quiz-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
             gap: 20px; 
             margin-bottom: 40px; 
         }
@@ -221,6 +222,7 @@
         .quiz-card.card-sejarah { border-top-color: var(--primary); }
         .quiz-card.card-pi4 { border-top-color: var(--blue); }
         .quiz-card.card-pi5 { border-top-color: var(--islamic); }
+        .quiz-card.card-sains { border-top-color: var(--purple); }
         
         .quiz-card:hover { 
             transform: translateY(-6px); 
@@ -238,6 +240,7 @@
         .badge-sejarah { background: #fee2e2; color: #991b1b; }
         .badge-pi4 { background: #e0f2fe; color: #0369a1; }
         .badge-pi5 { background: #d1fae5; color: #065f46; }
+        .badge-sains { background: #ede9fe; color: #6d28d9; }
         
         .card-title {
             font-size: 1.35em;
@@ -259,6 +262,7 @@
         .card-sejarah .card-action { color: var(--primary); }
         .card-pi4 .card-action { color: var(--blue); }
         .card-pi5 .card-action { color: var(--islamic); }
+        .card-sains .card-action { color: var(--purple); }
         
         /* Modals */
         .modal { 
@@ -290,7 +294,7 @@
 
     <div class="container" id="mainContainer">
         <!-- Search bar -->
-        <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Cari subjek atau tajuk (Cth: Sejarah, Pendidikan Islam, Tahun 4, Tahun 5)..." onkeyup="filterQuizzes()">
+        <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Cari subjek atau tajuk (Cth: Sains, Sejarah, Pendidikan Islam, Tahun 4, Tahun 5)..." onkeyup="filterQuizzes()">
 
         <!-- Kotak Upload PDF -->
         <div class="upload-section" id="uploadSection">
@@ -316,31 +320,41 @@
         </div>
 
         <div class="quiz-grid" id="quizList">
-            <!-- 1. Sejarah Tahun 4 -->
+            <!-- 1. Sains Tahun 5 (UASA) -->
+            <a href="sains-tahun5.html" class="quiz-card card-sains" data-subject="Sains Tahun 5 UASA Kemahiran Saintifik Haba Jirim Litar Elektrik Buruj Pengaratan Mesin">
+                <div>
+                    <span class="badge badge-sains">Tahun 5</span>
+                    <h3 class="card-title">🔬 Sains (UASA)</h3>
+                    <p class="card-desc">Ujian Akhir Sesi Akademik — 10 soalan objektif, Bahagian B & C (Haba, Jirim, Litar, Buruj, Pengaratan & Mesin Lestari).</p>
+                </div>
+                <div class="card-action">Mula Jawab Soalan ➡</div>
+            </a>
+
+            <!-- 2. Sejarah Tahun 4 (UASA) -->
             <a href="sejarah-tahun4.html" class="quiz-card card-sejarah" data-subject="Sejarah Tahun 4 UASA">
                 <div>
                     <span class="badge badge-sejarah">Tahun 4</span>
-                    <h3 class="card-title">Sejarah (UASA)</h3>
+                    <h3 class="card-title">📜 Sejarah (UASA)</h3>
                     <p class="card-desc">Ujian Akhir Sesi Akademik — 20 soalan objektif, bahagian struktur & subjektif lengkap berserta semakan markah automatik.</p>
                 </div>
                 <div class="card-action">Mula Jawab Soalan ➡</div>
             </a>
 
-            <!-- 2. Pendidikan Islam Tahun 4 -->
+            <!-- 3. Pendidikan Islam Tahun 4 -->
             <a href="pendidikan-islam-tahun4.html" class="quiz-card card-pi4" data-subject="Pendidikan Islam Tahun 4 Akhir Tahun Jawi Tajwid Hafazan Hadith">
                 <div>
                     <span class="badge badge-pi4">Tahun 4</span>
-                    <h3 class="card-title">ڤنديديقن إسلام (تاهون 4)</h3>
-                    <p class="card-desc">Peperiksaan Akhir Tahun — Surah Al-Qariah, Ikhfa' Syafawi & Idgham Mislain, Al-Ikhlas, Hadith Tetamu, Adab, Akidah Kufur, Sirah & Jawi.</p>
+                    <h3 class="card-title">🕌 ڤنديديقن إسلام (تاهون 4)</h3>
+                    <p class="card-desc">Peperiksaan Akhir Tahun — Surah Al-Qariah, Ikhfa' Syafawi & Idgham Mislain, Al-Ikhlas, Hadith Tetamu, Adab, Akidah & Jawi.</p>
                 </div>
                 <div class="card-action">Mula Jawab Soalan ➡</div>
             </a>
 
-            <!-- 3. Pendidikan Islam Tahun 5 -->
+            <!-- 4. Pendidikan Islam Tahun 5 -->
             <a href="pendidikan-islam-tahun5.html" class="quiz-card card-pi5" data-subject="Pendidikan Islam Tahun 5 Akhir Tahun Jawi Tajwid">
                 <div>
                     <span class="badge badge-pi5">Tahun 5</span>
-                    <h3 class="card-title">ڤنديديقن إسلام (تاهون 5)</h3>
+                    <h3 class="card-title">🕌 ڤنديديقن إسلام (تاهون 5)</h3>
                     <p class="card-desc">Pentaksiran Akhir Tahun — Surah At-Tin, Surah Al-'Asr, Tajwid, Akidah Sihir, dan Kepimpinan Nabi (Semakan Markah Automatik).</p>
                 </div>
                 <div class="card-action">Mula Jawab Soalan ➡</div>
