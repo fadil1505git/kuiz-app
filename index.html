@@ -65,7 +65,9 @@
         }
         .search-bar:focus { border-color: var(--accent); box-shadow: 0 6px 20px rgba(78, 205, 196, 0.25); }
 
+        /* Bahagian Muat Naik PDF disembunyikan sementara waktu */
         .upload-section { 
+            display: none !important;
             background: rgba(255,255,255,0.96); padding: 26px; border-radius: 18px; 
             text-align: center; border: 3px dashed var(--accent); margin-bottom: 30px; 
             box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
@@ -146,7 +148,7 @@
         <!-- Search bar -->
         <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Cari subjek atau tajuk (Cth: Sains, Sejarah, Pendidikan Islam, Tahun 4, Tahun 5)..." onkeyup="filterQuizzes()">
 
-        <!-- Kotak Upload PDF -->
+        <!-- Kotak Upload PDF (Disembunyikan sementara) -->
         <div class="upload-section" id="uploadSection">
             <h3>Jana Kuiz & Visual PDF 📄✨</h3>
             <p class="upload-desc">Muat naik mana-mana kertas soalan PDF. Sistem akan memaparkan helaian asal di sebelah borang soalan interaktif!</p>
