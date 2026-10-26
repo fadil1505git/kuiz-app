@@ -35,6 +35,8 @@
         
         .btn { background: linear-gradient(45deg, #ff6b6b, #ff8e8b); color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 15px; transition: transform 0.2s; box-shadow: 0 4px 10px rgba(255,107,107,0.3); }
         .btn:hover { transform: scale(1.05); }
+        .btn-tutup { background: #9ca3af; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: 'Nunito', sans-serif; transition: transform 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn-tutup:hover { background: #6b7280; transform: scale(1.05); }
         
         .loading { display: none; text-align: center; padding: 20px; color: var(--primary); font-weight: bold; font-size: 1.2em; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
@@ -140,7 +142,7 @@
         <div class="modal-content">
             <h2 style="color: var(--primary); font-size: 2.5em; margin-top:0;">TAHNIAH! 🌟</h2>
             <p style="font-size: 1.2em; color: #666; font-weight: bold;">Kamu telah berjaya melengkapkan kuiz ini.</p>
-            <button class="btn" style="width: 100%; font-size: 1.2em;" onclick="document.getElementById('successModal').style.display='none'">Tutup & Semak Markah</button>
+            <button class="btn" style="width: 100%; font-size: 1.2em;" onclick="tutupTahniah()">Tutup & Semak Markah</button>
         </div>
     </div>
 
@@ -195,8 +197,31 @@
             }());
             setTimeout(() => document.getElementById('successModal').style.display = 'flex', 1000);
         }
+
+        function tutupTahniah() {
+            document.getElementById('successModal').style.display = 'none';
+        }
+
+        // FUNGSI BARU UNTUK TUTUP KUIZ
+        function tutupKuiz() {
+            // Sembunyikan workspace dan bersihkan kandungan AI
+            document.getElementById('workspace').style.display = 'none';
+            document.getElementById('ai-result').innerHTML = '';
+            document.getElementById('pdfViewer').innerHTML = '<h3>Kertas Soalan Asal (Rujukan Visual)</h3>';
+            
+            // Kembalikan menu utama
+            document.getElementById('uploadSection').style.display = 'block';
+            document.getElementById('quizList').style.display = 'grid';
+            document.getElementById('senaraiTajuk').style.display = 'block';
+            document.getElementById('searchInput').style.display = 'block';
+            
+            // Reset input file
+            document.getElementById('pdfUpload').value = '';
+        }
+
         window.playPopSound = playPopSound;
         window.playTypingSound = playTypingSound;
+        window.tutupKuiz = tutupKuiz;
 
         // --- SISTEM PORTAL ---
         window.onload = function() {
@@ -287,7 +312,6 @@
         }
 
         async function generateQuizWithGemini(text, apiKey) {
-            // PROMPT DIKEMASKINI KE MODEL BARU (gemini-1.5-flash)
             const prompt = `Anda adalah sistem pengekstrakan kuiz. Berikut teks fail peperiksaan:
             
             ${text}
@@ -303,8 +327,8 @@
             5. Hanya kembalikan elemen di dalam teg <form id="aiForm"> sahaja, tanpa tag <html> atau markdown backticks.`;
 
             try {
-                // MENGGUNAKAN MODEL BARU YANG LEBIH PANTAS DAN STABIL: gemini-1.5-flash
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                // MODEL DITUKAR KEPADA gemini-1.5-flash-latest ATAU gemini-pro (Saya gunakan gemini-1.5-flash-latest)
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
@@ -313,10 +337,14 @@
                 const data = await response.json();
                 document.getElementById('loading').style.display = 'none';
                 
-                // SISTEM PENGESAN RALAT (ERROR DETECTOR) DITAMBAH
                 if (data.error) {
                     alert("Ralat API Gemini: " + data.error.message + "\n\nSila semak semula API Key anda.");
                     document.getElementById('settingsModal').style.display='flex';
+                    // Reset UI
+                    document.getElementById('uploadSection').style.display = 'block';
+                    document.getElementById('quizList').style.display = 'grid';
+                    document.getElementById('senaraiTajuk').style.display = 'block';
+                    document.getElementById('searchInput').style.display = 'block';
                     return;
                 }
                 
@@ -324,9 +352,13 @@
                     let aiText = data.candidates[0].content.parts[0].text;
                     aiText = aiText.replace(/```html/g, '').replace(/```/g, '');
                     
+                    // HEADER KUIZ DITAMBAH BUTANG TUTUP
                     document.getElementById('ai-result').innerHTML = `
-                        <h3 style="color:var(--primary); text-align:center;">Kuiz Digital Anda Sedia! 🎉</h3>
-                        <p style="text-align:center; font-size:0.9em; color:#666;">Jawab semua soalan. Rujuk kertas asal di sebelah jika ada gambarajah.</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px;">
+                            <h3 style="color:var(--primary); margin:0;">Kuiz Digital Sedia! 🎉</h3>
+                            <button class="btn-tutup" onclick="window.tutupKuiz()">❌ Tutup</button>
+                        </div>
+                        <p style="text-align:center; font-size:0.9em; color:#666; margin-bottom:20px;">Jawab semua soalan. Rujuk kertas asal di sebelah jika ada gambarajah.</p>
                         ` + aiText + `
                         <button type="button" class="btn" style="width:100%; font-size:20px; padding:20px; border-radius:50px; margin-top:30px; text-transform:uppercase; letter-spacing:2px;" onclick="submitQuiz()">Hantar Jawapan 🚀</button>
                     `;
