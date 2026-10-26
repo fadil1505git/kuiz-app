@@ -39,257 +39,107 @@
             position: relative; 
             z-index: 10;
         }
-        .header h1 { 
-            margin: 0; 
-            font-weight: 900; 
-            font-size: 2.1em; 
-            letter-spacing: -0.5px;
-        }
-        .header p {
-            margin: 4px 0 0 0;
-            color: #6b7280;
-            font-size: 0.95em;
-            font-weight: bold;
-        }
-        .btn-settings { 
-            position: absolute; 
-            right: 20px; 
-            top: 20px; 
-            background: var(--accent); 
-            color: white; 
-            border: none; 
-            padding: 8px 16px; 
-            border-radius: 10px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            font-family: 'Nunito', sans-serif;
-            transition: all 0.2s; 
-        }
-        .btn-settings:hover { 
-            transform: scale(1.05); 
-            background: #3db8af;
-        }
+        .header h1 { margin: 0; font-weight: 900; font-size: 2.1em; letter-spacing: -0.5px; }
+        .header p { margin: 4px 0 0 0; color: #6b7280; font-size: 0.95em; font-weight: bold; }
         
-        .container { 
-            max-width: 1100px; 
-            margin: 25px auto; 
-            padding: 0 20px; 
+        .btn-settings { 
+            position: absolute; right: 20px; top: 20px; background: var(--accent); 
+            color: white; border: none; padding: 8px 16px; border-radius: 10px; 
+            cursor: pointer; font-weight: bold; font-family: 'Nunito', sans-serif; transition: all 0.2s; 
         }
+        .btn-settings:hover { background: #3db8af; transform: scale(1.05); }
+
+        .btn-rekod { 
+            position: absolute; left: 20px; top: 20px; background: var(--purple); 
+            color: white; border: none; padding: 8px 16px; border-radius: 10px; 
+            cursor: pointer; font-weight: bold; font-family: 'Nunito', sans-serif; transition: all 0.2s; 
+        }
+        .btn-rekod:hover { background: #7c3aed; transform: scale(1.05); }
+        
+        .container { max-width: 1050px; margin: 25px auto; padding: 0 20px; }
         
         .search-bar { 
-            width: 100%; 
-            padding: 15px 20px; 
-            border-radius: 14px; 
-            border: 2px solid white; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06); 
-            font-size: 16px; 
-            margin-bottom: 25px; 
-            font-family: 'Nunito', sans-serif; 
-            outline: none; 
-            box-sizing: border-box; 
-            transition: all 0.2s;
+            width: 100%; padding: 15px 20px; border-radius: 14px; border: 2px solid white; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06); font-size: 16px; margin-bottom: 25px; 
+            font-family: 'Nunito', sans-serif; outline: none; box-sizing: border-box; transition: all 0.2s;
         }
-        .search-bar:focus { 
-            border-color: var(--accent); 
-            box-shadow: 0 6px 20px rgba(78, 205, 196, 0.25);
-        }
+        .search-bar:focus { border-color: var(--accent); box-shadow: 0 6px 20px rgba(78, 205, 196, 0.25); }
 
-        /* Upload Section */
         .upload-section { 
-            background: rgba(255,255,255,0.96); 
-            padding: 26px; 
-            border-radius: 18px; 
-            text-align: center; 
-            border: 3px dashed var(--accent); 
-            margin-bottom: 30px; 
+            background: rgba(255,255,255,0.96); padding: 26px; border-radius: 18px; 
+            text-align: center; border: 3px dashed var(--accent); margin-bottom: 30px; 
             box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
         }
-        .upload-section h3 { 
-            color: var(--accent); 
-            margin: 0 0 6px 0; 
-            font-size: 1.45em; 
-            font-weight: 900;
-        }
-        .upload-desc {
-            color: #64748b;
-            font-size: 0.95em;
-            margin-bottom: 12px;
-            font-weight: bold;
-        }
+        .upload-section h3 { color: var(--accent); margin: 0 0 6px 0; font-size: 1.45em; font-weight: 900; }
+        .upload-desc { color: #64748b; font-size: 0.95em; margin-bottom: 12px; font-weight: bold; }
         
         .btn { 
-            background: linear-gradient(45deg, #ff6b6b, #ff8e8b); 
-            color: white; 
-            border: none; 
-            padding: 12px 28px; 
-            border-radius: 50px; 
-            cursor: pointer; 
-            font-size: 16px; 
-            font-weight: bold; 
-            margin-top: 10px; 
-            transition: transform 0.2s; 
-            box-shadow: 0 4px 12px rgba(255,107,107,0.35); 
-            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8b); color: white; border: none; 
+            padding: 12px 28px; border-radius: 50px; cursor: pointer; font-size: 16px; 
+            font-weight: bold; margin-top: 10px; transition: transform 0.2s; 
+            box-shadow: 0 4px 12px rgba(255,107,107,0.35); font-family: 'Nunito', sans-serif;
         }
         .btn:hover { transform: scale(1.04); }
-        .btn-tutup { 
-            background: #94a3b8; 
-            color: white; 
-            border: none; 
-            padding: 8px 16px; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            font-family: 'Nunito', sans-serif; 
-        }
-        .btn-tutup:hover { background: #64748b; }
+        .btn-tutup { background: #94a3b8; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: 'Nunito', sans-serif; }
         
-        .loading { 
-            display: none; 
-            text-align: center; 
-            padding: 20px; 
-            color: var(--primary); 
-            font-weight: 900; 
-            font-size: 1.2em; 
-            animation: pulse 1.5s infinite; 
-        }
+        .loading { display: none; text-align: center; padding: 20px; color: var(--primary); font-weight: 900; font-size: 1.2em; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
 
-        /* Workspace (Split Screen Layout) */
-        .workspace { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 20px; 
-            display: none; 
-            margin-bottom: 40px; 
-        }
-        @media (min-width: 850px) { 
-            .workspace { flex-direction: row; align-items: flex-start; } 
-        }
-        .pdf-panel { 
-            flex: 1; 
-            background: #1e293b; 
-            border-radius: 16px; 
-            padding: 15px; 
-            max-height: 85vh; 
-            overflow-y: auto; 
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5); 
-            text-align: center;
-        }
+        .workspace { display: flex; flex-direction: column; gap: 20px; display: none; margin-bottom: 40px; }
+        @media (min-width: 850px) { .workspace { flex-direction: row; align-items: flex-start; } }
+        .pdf-panel { flex: 1; background: #1e293b; border-radius: 16px; padding: 15px; max-height: 85vh; overflow-y: auto; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); text-align: center; }
         .pdf-panel h3 { color: white; margin-top: 0; border-bottom: 2px solid #334155; padding-bottom: 10px; }
         .pdf-page-canvas { max-width: 100%; height: auto; margin-bottom: 15px; border-radius: 8px; background: white; }
-        .quiz-panel { 
-            flex: 1.1; 
-            background: rgba(255,255,255,0.98); 
-            padding: 30px; 
-            border-radius: 16px; 
-            max-height: 85vh; 
-            overflow-y: auto; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-            border-top: 6px solid var(--primary);
-        }
+        .quiz-panel { flex: 1.1; background: rgba(255,255,255,0.98); padding: 30px; border-radius: 16px; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 6px solid var(--primary); }
         
-        /* Cards Grid */
-        .section-heading {
-            font-size: 1.45em;
-            font-weight: 900;
-            color: #1e293b;
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .quiz-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
-            gap: 20px; 
-            margin-bottom: 40px; 
-        }
+        .section-heading { font-size: 1.45em; font-weight: 900; color: #1e293b; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+        .quiz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
         .quiz-card { 
-            background: rgba(255,255,255,0.98); 
-            padding: 24px; 
-            border-radius: 18px; 
-            box-shadow: 0 6px 15px rgba(0,0,0,0.06); 
-            transition: all 0.3s; 
-            cursor: pointer; 
-            text-decoration: none; 
-            color: inherit; 
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            border-top: 6px solid var(--primary);
+            background: rgba(255,255,255,0.98); padding: 24px; border-radius: 18px; box-shadow: 0 6px 15px rgba(0,0,0,0.06); 
+            transition: all 0.3s; cursor: pointer; text-decoration: none; color: inherit; display: flex;
+            flex-direction: column; justify-content: space-between; border-top: 6px solid var(--primary);
         }
         .quiz-card.card-sejarah { border-top-color: var(--primary); }
         .quiz-card.card-pi4 { border-top-color: var(--blue); }
         .quiz-card.card-pi5 { border-top-color: var(--islamic); }
         .quiz-card.card-sains { border-top-color: var(--purple); }
+        .quiz-card:hover { transform: translateY(-6px); box-shadow: 0 12px 25px rgba(0,0,0,0.12); }
         
-        .quiz-card:hover { 
-            transform: translateY(-6px); 
-            box-shadow: 0 12px 25px rgba(0,0,0,0.12); 
-        }
-        .badge {
-            display: inline-block;
-            align-self: flex-start;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 900;
-            text-transform: uppercase;
-        }
+        .badge { display: inline-block; align-self: flex-start; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 900; text-transform: uppercase; }
         .badge-sejarah { background: #fee2e2; color: #991b1b; }
         .badge-pi4 { background: #e0f2fe; color: #0369a1; }
         .badge-pi5 { background: #d1fae5; color: #065f46; }
         .badge-sains { background: #ede9fe; color: #6d28d9; }
         
-        .card-title {
-            font-size: 1.35em;
-            font-weight: 900;
-            margin: 12px 0 6px 0;
-            color: #0f172a;
-        }
-        .card-desc {
-            color: #64748b;
-            font-size: 0.9em;
-            margin: 0;
-            line-height: 1.4;
-        }
-        .card-action {
-            margin-top: 18px;
-            font-weight: 900;
-            font-size: 0.95em;
-        }
+        .card-title { font-size: 1.35em; font-weight: 900; margin: 12px 0 6px 0; color: #0f172a; }
+        .card-desc { color: #64748b; font-size: 0.9em; margin: 0; line-height: 1.4; }
+        .card-action { margin-top: 18px; font-weight: 900; font-size: 0.95em; }
         .card-sejarah .card-action { color: var(--primary); }
         .card-pi4 .card-action { color: var(--blue); }
         .card-pi5 .card-action { color: var(--islamic); }
         .card-sains .card-action { color: var(--purple); }
         
-        /* Modals */
-        .modal { 
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.6); 
-            backdrop-filter: blur(5px); 
-            justify-content: center; 
-            align-items: center; 
-            z-index: 1000; 
-        }
-        .modal-content { 
-            background: white; 
-            padding: 35px; 
-            border-radius: 20px; 
-            max-width: 480px; 
-            width: 90%; 
-            box-sizing: border-box;
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: white; padding: 35px; border-radius: 20px; max-width: 480px; width: 90%; box-sizing: border-box; }
+        
+        /* Table Rekod */
+        .table-rekod { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+        .table-rekod th { background: #f1f5f9; padding: 12px 10px; text-align: left; border-bottom: 2px solid #cbd5e1; color: #334155; }
+        .table-rekod td { padding: 12px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
+        .table-rekod tr:hover { background-color: #f8fafc; }
+        
+        @media (max-width: 600px) {
+            .btn-rekod { top: 60px; left: auto; right: 20px; font-size: 0.8em; }
+            .btn-settings { top: 20px; right: 20px; font-size: 0.8em; }
         }
     </style>
 </head>
 <body>
     <div class="header">
+        <button class="btn-rekod" onclick="bukaRekod()">📊 Rekod Markah Awan</button>
         <h1>🎮 Portal Pembelajaran Pintar</h1>
-        <p>Aplikasi Kuiz & Semakan Markah Automatik untuk Anak</p>
-        <button class="btn-settings" onclick="bukaTetapan()">⚙️ Tetapan API & Model</button>
+        <p>Aplikasi Kuiz & Semakan Markah Automatik</p>
+        <button class="btn-settings" onclick="bukaTetapan()">⚙️ Tetapan Sistem</button>
     </div>
 
     <div class="container" id="mainContainer">
@@ -325,7 +175,7 @@
                 <div>
                     <span class="badge badge-sains">Tahun 5</span>
                     <h3 class="card-title">🔬 Sains (UASA)</h3>
-                    <p class="card-desc">Ujian Akhir Sesi Akademik — 10 soalan objektif, Bahagian B & C (Haba, Jirim, Litar, Buruj, Pengaratan & Mesin Lestari).</p>
+                    <p class="card-desc">Ujian Akhir Sesi Akademik — 10 soalan objektif, Bahagian B & C lengkap.</p>
                 </div>
                 <div class="card-action">Mula Jawab Soalan ➡</div>
             </a>
@@ -335,7 +185,7 @@
                 <div>
                     <span class="badge badge-sejarah">Tahun 4</span>
                     <h3 class="card-title">📜 Sejarah (UASA)</h3>
-                    <p class="card-desc">Ujian Akhir Sesi Akademik — 20 soalan objektif, bahagian struktur & subjektif lengkap berserta semakan markah automatik.</p>
+                    <p class="card-desc">Ujian Akhir Sesi Akademik — 20 soalan objektif, struktur & subjektif lengkap.</p>
                 </div>
                 <div class="card-action">Mula Jawab Soalan ➡</div>
             </a>
@@ -345,7 +195,7 @@
                 <div>
                     <span class="badge badge-pi4">Tahun 4</span>
                     <h3 class="card-title">🕌 ڤنديديقن إسلام (تاهون 4)</h3>
-                    <p class="card-desc">Peperiksaan Akhir Tahun — Surah Al-Qariah, Ikhfa' Syafawi & Idgham Mislain, Al-Ikhlas, Hadith Tetamu, Adab, Akidah & Jawi.</p>
+                    <p class="card-desc">Peperiksaan Akhir Tahun — Ikhfa' Syafawi, Al-Ikhlas, Hadith, Adab, Kufur, Jawi.</p>
                 </div>
                 <div class="card-action">Mula Jawab Soalan ➡</div>
             </a>
@@ -355,39 +205,63 @@
                 <div>
                     <span class="badge badge-pi5">Tahun 5</span>
                     <h3 class="card-title">🕌 ڤنديديقن إسلام (تاهون 5)</h3>
-                    <p class="card-desc">Pentaksiran Akhir Tahun — Surah At-Tin, Surah Al-'Asr, Tajwid, Akidah Sihir, dan Kepimpinan Nabi (Semakan Markah Automatik).</p>
+                    <p class="card-desc">Pentaksiran Akhir Tahun — Surah At-Tin, Tajwid, Akidah Sihir, Kepimpinan Nabi.</p>
                 </div>
                 <div class="card-action">Mula Jawab Soalan ➡</div>
             </a>
         </div>
     </div>
 
+    <!-- MODAL REKOD MARKAH -->
+    <div id="rekodModal" class="modal">
+        <div class="modal-content" style="max-width: 850px; width: 95%;">
+            <h2 style="color: var(--purple); margin-top:0; border-bottom: 2px dashed var(--purple); padding-bottom:10px;">📊 Sejarah Markah Murid</h2>
+            <div style="max-height: 400px; overflow-y: auto; text-align: left; margin-bottom: 20px;">
+                <table class="table-rekod">
+                    <thead>
+                        <tr>
+                            <th>Tarikh & Masa</th>
+                            <th>Nama Murid</th>
+                            <th>Subjek / Kuiz</th>
+                            <th style="text-align:center;">Skor</th>
+                            <th style="text-align:center;">Peratus</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rekodTableBody">
+                        <!-- Data rekod akan dipaparkan di sini melalui JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button class="btn" style="background: #94a3b8; width:100%;" onclick="document.getElementById('rekodModal').style.display='none'">Tutup Paparan</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Tetapan API -->
     <div id="settingsModal" class="modal">
         <div class="modal-content">
-            <h2 style="color: var(--primary); margin-top:0; font-size:1.6em;">⚙️ Tetapan API & Model</h2>
+            <h2 style="color: var(--primary); margin-top:0; font-size:1.6em;">⚙️ Tetapan Sistem</h2>
             
-            <div style="background: #f8fafc; padding: 14px; border-radius: 10px; border-left: 4px solid var(--accent); text-align: left; margin-bottom: 18px;">
-                <strong style="color: var(--text); font-size: 1em;">Panduan Dapatkan API Key Percuma:</strong>
-                <ol style="color: #475569; margin: 6px 0 0 0; padding-left: 20px; font-size: 0.9em; line-height: 1.5;">
-                    <li>Buka <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--primary); font-weight: bold; text-decoration: none;">Google AI Studio ↗</a>.</li>
-                    <li>Log masuk menggunakan akaun Google/Gmail peribadi.</li>
-                    <li>Klik <strong>Create API key</strong> dan salin kuncinya.</li>
-                </ol>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 10px; border-left: 4px solid #10b981; text-align: left; margin-bottom: 20px;">
+                <strong style="color: var(--text); font-size: 1.05em;">1. Pangkalan Data Awan (Google Sheets)</strong>
+                <p style="font-size: 0.9em; color:#475569; margin: 5px 0;">Tampal URL <em>Web App</em> Apps Script anda di sini supaya markah anak direkodkan ke Google Sheets.</p>
+                <input type="text" id="dbUrlInput" style="width: 100%; padding: 11px; margin-top: 5px; border: 2px solid #cbd5e1; border-radius: 8px; font-family:'Nunito'; box-sizing:border-box;" placeholder="https://script.google.com/macros/s/..../exec">
             </div>
 
-            <label style="display:block; text-align:left; font-weight:bold; font-size:0.95em; margin-bottom:4px;">Kunci API Gemini:</label>
-            <input type="password" id="apiKeyInput" style="width: 100%; padding: 11px; margin-bottom: 15px; border: 2px solid #cbd5e1; border-radius: 8px; font-family:'Nunito'; box-sizing:border-box;" placeholder="Tampal API Key di sini...">
+            <div style="background: #f8fafc; padding: 15px; border-radius: 10px; border-left: 4px solid var(--accent); text-align: left; margin-bottom: 18px;">
+                <strong style="color: var(--text); font-size: 1.05em;">2. Tetapan AI Gemini (Jana PDF)</strong>
+                <p style="font-size: 0.9em; color:#475569; margin: 5px 0;">Hanya jika anda ingin menjana kuiz dari fail PDF baharu.</p>
+                <input type="password" id="apiKeyInput" style="width: 100%; padding: 11px; margin: 10px 0; border: 2px solid #cbd5e1; border-radius: 8px; font-family:'Nunito'; box-sizing:border-box;" placeholder="Tampal API Key Gemini di sini...">
+                <select id="modelSelect" style="width: 100%; padding: 11px; border: 2px solid #cbd5e1; border-radius: 8px; font-family:'Nunito'; font-weight:bold; box-sizing:border-box; outline:none;">
+                    <option value="gemini-3.8-flash">gemini-3.8-flash (Disyorkan)</option>
+                    <option value="gemini-2.5-flash">gemini-2.5-flash</option>
+                    <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+                    <option value="gemini-pro">gemini-pro</option>
+                </select>
+            </div>
 
-            <label style="display:block; text-align:left; font-weight:bold; font-size:0.95em; margin-bottom:4px;">Pilih Model AI:</label>
-            <select id="modelSelect" style="width: 100%; padding: 11px; margin-bottom: 20px; border: 2px solid #cbd5e1; border-radius: 8px; font-family:'Nunito'; font-weight:bold; box-sizing:border-box; outline:none;">
-                <option value="gemini-3.8-flash">gemini-3.8-flash (Disyorkan Rasmi)</option>
-                <option value="gemini-2.5-flash">gemini-2.5-flash</option>
-                <option value="gemini-1.5-flash">gemini-1.5-flash</option>
-                <option value="gemini-pro">gemini-pro</option>
-            </select>
-
-            <button class="btn" style="width: 100%; margin-top:0;" onclick="saveSettings()">Simpan Tetapan</button>
+            <button class="btn" style="width: 100%; margin-top:0;" onclick="saveSettings()">Simpan Semua Tetapan</button>
             <button class="btn" style="width: 100%; background: #94a3b8; box-shadow: none; margin-top: 10px;" onclick="document.getElementById('settingsModal').style.display='none'">Batal</button>
         </div>
     </div>
@@ -396,14 +270,10 @@
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
         window.onload = function() {
-            if(localStorage.getItem('geminiApiKey')) {
-                document.getElementById('apiKeyInput').value = localStorage.getItem('geminiApiKey');
-            }
-            if(localStorage.getItem('geminiSelectedModel')) {
-                document.getElementById('modelSelect').value = localStorage.getItem('geminiSelectedModel');
-            } else {
-                document.getElementById('modelSelect').value = 'gemini-3.8-flash';
-            }
+            if(localStorage.getItem('geminiApiKey')) document.getElementById('apiKeyInput').value = localStorage.getItem('geminiApiKey');
+            if(localStorage.getItem('geminiSelectedModel')) document.getElementById('modelSelect').value = localStorage.getItem('geminiSelectedModel');
+            else document.getElementById('modelSelect').value = 'gemini-3.8-flash';
+            if(localStorage.getItem('googleSheetUrl')) document.getElementById('dbUrlInput').value = localStorage.getItem('googleSheetUrl');
         };
 
         function bukaTetapan() {
@@ -413,15 +283,65 @@
         function saveSettings() {
             const key = document.getElementById('apiKeyInput').value.trim();
             const model = document.getElementById('modelSelect').value;
-            if(key === "") {
-                alert("Sila masukkan API Key terlebih dahulu.");
-                return;
-            }
-            localStorage.setItem('geminiApiKey', key);
+            const dbUrl = document.getElementById('dbUrlInput').value.trim();
+            
+            if(key) localStorage.setItem('geminiApiKey', key);
             localStorage.setItem('geminiSelectedModel', model);
-            alert(`Tetapan disimpan!
-Model: ${model}`);
+            if(dbUrl) localStorage.setItem('googleSheetUrl', dbUrl);
+            
+            alert('Tetapan berjaya disimpan!');
             document.getElementById('settingsModal').style.display = 'none';
+        }
+
+        async function bukaRekod() {
+            const tbody = document.getElementById('rekodTableBody');
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 30px; font-size: 1.1em; font-weight:bold; color:var(--primary);">⏳ Sedang menyemak pangkalan data awan (Google Sheets)...</td></tr>';
+            document.getElementById('rekodModal').style.display = 'flex';
+            
+            let rekod = [];
+            const dbUrl = localStorage.getItem('googleSheetUrl');
+            
+            if (dbUrl && dbUrl.includes("script.google.com")) {
+                try {
+                    const res = await fetch(dbUrl);
+                    rekod = await res.json();
+                } catch (e) {
+                    console.error("Gagal fetch", e);
+                    rekod = JSON.parse(localStorage.getItem('rekod_markah')) || []; 
+                }
+            } else {
+                rekod = JSON.parse(localStorage.getItem('rekod_markah')) || [];
+            }
+            
+            tbody.innerHTML = '';
+            if (!rekod || rekod.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 20px; color: #64748b; font-weight:bold;">Tiada rekod. Jika anda baru letak URL Google Sheets, pastikan anak anda hantar markah dahulu.</td></tr>';
+            } else {
+                rekod.forEach(r => {
+                    let p = parseInt(r.peratus) || 0;
+                    let warnaPeratus = p >= 80 ? '#15803d' : (p >= 50 ? '#b45309' : '#ef4444');
+                    let badge = p >= 80 ? 'A' : (p >= 65 ? 'B' : (p >= 50 ? 'C' : 'D'));
+                    
+                    let tarikhFormatted = r.tarikh ? r.tarikh.replace('T', ' ').substring(0, 19) : '-';
+                    if(!r.tarikh && r.kelas) tarikhFormatted = "Rekod Lama"; // For old format compatibility
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td style="font-size: 0.85em; color: #64748b;">${tarikhFormatted}</td>
+                            <td>
+                                <strong style="color: var(--text);">${r.nama || '-'}</strong><br>
+                                <span style="font-size: 0.8em; color: #64748b;">Kelas: ${r.kelas || '-'}</span>
+                            </td>
+                            <td style="font-weight: bold; color: var(--primary);">${r.subjek || '-'}</td>
+                            <td style="text-align:center; font-weight:900; font-size: 1.1em;">${r.skor || '-'}</td>
+                            <td style="text-align:center;">
+                                <span style="display:inline-block; font-weight:bold; font-size:1.1em; color:${warnaPeratus};">${p}%</span><br>
+                                <span style="font-size:0.75em; background:${warnaPeratus}; color:white; padding: 2px 8px; border-radius:10px;">Gred ${badge}</span>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
         }
 
         function filterQuizzes() {
@@ -448,7 +368,7 @@ Model: ${model}`);
             const fileInput = document.getElementById('pdfUpload');
             const apiKey = localStorage.getItem('geminiApiKey');
             if (!apiKey) {
-                alert("Sila masukkan API Key Gemini di menu '⚙️ Tetapan API & Model' terlebih dahulu.");
+                alert("Sila masukkan API Key Gemini di menu '⚙️ Tetapan Sistem' terlebih dahulu.");
                 bukaTetapan();
                 return;
             }
