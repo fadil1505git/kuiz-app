@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="ms" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendidikan Islam Tahun 4 - Akhir Tahun</title>
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-light: #38bdf8;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #f0f9ff;
+            --text: #1f2937;
+        }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #bae6fd 0%, #fef3c7 100%);
+            color: var(--text);
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 850px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 35px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 14px;
+        }
+        .nav-back:hover { text-decoration: underline; }
+        .header {
+            text-align: center;
+            border-bottom: 3px dashed var(--primary);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            color: var(--primary);
+            font-size: 2.2em;
+            margin: 0 0 5px 0;
+            font-weight: 900;
+        }
+        .header p {
+            color: #6b7280;
+            margin: 0;
+            font-weight: bold;
+        }
+        .info-box {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .info-box input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            outline: none;
+        }
+        .info-box input:focus { border-color: var(--primary); }
+        .section-title {
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 1.25em;
+            font-weight: 900;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .question-card {
+            background: white;
+            border-left: 5px solid var(--primary);
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.04);
+            transition: transform 0.2s;
+        }
+        .jawi-text {
+            font-family: 'Amiri', serif;
+            font-size: 1.45em;
+            direction: rtl;
+            text-align: right;
+            line-height: 1.8;
+            color: #0f172a;
+            margin: 0 0 8px 0;
+        }
+        .rumi-hint {
+            font-size: 0.9em;
+            color: #64748b;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: bold;
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .options-grid label {
+            display: block;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+        .options-grid label:hover {
+            border-color: var(--primary);
+            background: #f0f9ff;
+        }
+        input[type="radio"] {
+            transform: scale(1.2);
+            margin-right: 10px;
+            accent-color: var(--primary);
+        }
+        select, input[type="text"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: 'Amiri', 'Nunito', sans-serif;
+            font-size: 1.1em;
+            box-sizing: border-box;
+            outline: none;
+            margin-top: 6px;
+        }
+        select:focus, input[type="text"]:focus {
+            border-color: var(--primary);
+        }
+
+        /* FEEDBACK BOX */
+        .feedback-box {
+            display: none;
+            margin-top: 10px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.92em;
+            font-weight: bold;
+        }
+        .feedback-correct {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid var(--success);
+        }
+        .feedback-wrong {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid var(--danger);
+        }
+
+        .btn-submit {
+            background: linear-gradient(45deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: 900;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 35px;
+            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.35);
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-submit:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 25px rgba(2, 132, 199, 0.5);
+        }
+
+        /* MODAL KEPUTUSAN */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-card {
+            background: white;
+            padding: 35px;
+            border-radius: 24px;
+            text-align: center;
+            max-width: 440px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-sizing: border-box;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.6); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 15px auto;
+            box-shadow: 0 8px 18px rgba(2, 132, 199, 0.4);
+        }
+        .score-number {
+            font-size: 2.3em;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .score-total {
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+        .grade-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 1.1em;
+            margin-bottom: 12px;
+        }
+        .grade-A { background: #dcfce7; color: #15803d; }
+        .grade-B { background: #dbeafe; color: #1d4ed8; }
+        .grade-C { background: #fef3c7; color: #b45309; }
+        .grade-D { background: #fee2e2; color: #b91c1c; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="nav-back">⬅ Kembali ke Portal Utama</a>
+        <div class="header">
+            <h1>🕌 ڤنديديقن إسلام تاهون 4</h1>
+            <p>Peperiksaan Akhir Tahun — Semakan & Markah Automatik</p>
+        </div>
+
+        <div class="info-box">
+            <input type="text" id="namaMurid" placeholder="🙋 Nama Murid" required>
+            <input type="text" id="kelasMurid" placeholder="🏫 Kelas" required>
+        </div>
+
+        <form id="quizForm">
+            <!-- BAHAGIAN 1: AL-QURAN HAFAZAN (SURAH AL-QARIAH) -->
+            <div class="section-title">
+                <span>(1) القرءان (حفظن) - سورة القارعة</span>
+                <span>10 Markah</span>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">(۱) وَمَا _____ مَا الْقَارِعَةُ</p>
+                <select id="h1" onchange="playPopSound()">
+                    <option value="">-- فيليه كلمة --</option>
+                    <option value="أَدْرَاكَ">أَدْرَاكَ</option>
+                    <option value="الْمَبْثُوثِ">الْمَبْثُوثِ</option>
+                    <option value="كَالْعِهْنِ">كَالْعِهْنِ</option>
+                    <option value="فَأَمَّا">فَأَمَّا</option>
+                    <option value="عِيشَةٍ">عِيشَةٍ</option>
+                </select>
+                <div class="feedback-box" id="fb_h1"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">(۲) يَوْمَ يَكُونُ النَّاسُ كَالْفَرَاشِ _____</p>
+                <select id="h2" onchange="playPopSound()">
+                    <option value="">-- فيليه كلمة --</option>
+                    <option value="أَدْرَاكَ">أَدْرَاكَ</option>
+                    <option value="الْمَبْثُوثِ">الْمَبْثُوثِ</option>
+                    <option value="كَالْعِهْنِ">كَالْعِهْنِ</option>
+                    <option value="فَأَمَّا">فَأَمَّا</option>
+                    <option value="عِيشَةٍ">عِيشَةٍ</option>
+                </select>
+                <div class="feedback-box" id="fb_h2"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">(۳) وَتَكُونُ الْجِبَالُ _____ الْمَنفُوشِ</p>
+                <select id="h3" onchange="playPopSound()">
+                    <option value="">-- فيليه كلمة --</option>
+                    <option value="كَالْعِهْنِ">كَالْعِهْنِ</option>
+                    <option value="الْمَبْثُوثِ">الْمَبْثُوثِ</option>
+                    <option value="أَدْرَاكَ">أَدْرَاكَ</option>
+                    <option value="فَأَمَّا">فَأَمَّا</option>
+                    <option value="عِيشَةٍ">عِيشَةٍ</option>
+                </select>
+                <div class="feedback-box" id="fb_h3"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">(٤) _____ مَن ثَقُلَتْ مَوَازِينُهُ</p>
+                <select id="h4" onchange="playPopSound()">
+                    <option value="">-- فيليه كلمة --</option>
+                    <option value="فَأَمَّا">فَأَمَّا</option>
+                    <option value="كَالْعِهْنِ">كَالْعِهْنِ</option>
+                    <option value="الْمَبْثُوثِ">الْمَبْثُوثِ</option>
+                    <option value="أَدْرَاكَ">أَدْرَاكَ</option>
+                    <option value="عِيشَةٍ">عِيشَةٍ</option>
+                </select>
+                <div class="feedback-box" id="fb_h4"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">(٥) فَهُوَ فِي _____ رَّاضِيَةٍ</p>
+                <select id="h5" onchange="playPopSound()">
+                    <option value="">-- فيليه كلمة --</option>
+                    <option value="عِيشَةٍ">عِيشَةٍ</option>
+                    <option value="فَأَمَّا">فَأَمَّا</option>
+                    <option value="كَالْعِهْنِ">كَالْعِهْنِ</option>
+                    <option value="الْمَبْثُوثِ">الْمَبْثُوثِ</option>
+                </select>
+                <div class="feedback-box" id="fb_h5"></div>
+            </div>
+
+            <!-- BAHAGIAN 2: TAJWID (IKHFA' SYAFAWI & IDGHAM MISLAIN) -->
+            <div class="section-title">
+                <span>(2) القرءان (تجويد) - ميم ساكنة</span>
+                <span>10 Markah</span>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">1. فَبَشِّرْهُم بِعَذَابٍ أَلِيمٍ</p>
+                <div class="options-grid">
+                    <label><input type="radio" name="tj1" value="Ikhfa' Syafawi" onclick="playPopSound()"> اخفاء شفوي (Ikhfa' Syafawi)</label>
+                    <label><input type="radio" name="tj1" value="Idgham Mislain" onclick="playPopSound()"> ادغام مثلين (Idgham Mislain)</label>
+                </div>
+                <div class="feedback-box" id="fb_tj1"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">2. إِنَّهَا عَلَيْهِم مُّؤْصَدَةٌ</p>
+                <div class="options-grid">
+                    <label><input type="radio" name="tj2" value="Ikhfa' Syafawi" onclick="playPopSound()"> اخفاء شفوي (Ikhfa' Syafawi)</label>
+                    <label><input type="radio" name="tj2" value="Idgham Mislain" onclick="playPopSound()"> ادغام مثلين (Idgham Mislain)</label>
+                </div>
+                <div class="feedback-box" id="fb_tj2"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">3. قُلُوبِهِم مَّا كَانُوا يَكْسِبُونَ</p>
+                <div class="options-grid">
+                    <label><input type="radio" name="tj3" value="Ikhfa' Syafawi" onclick="playPopSound()"> اخفاء شفوي (Ikhfa' Syafawi)</label>
+                    <label><input type="radio" name="tj3" value="Idgham Mislain" onclick="playPopSound()"> ادغام مثلين (Idgham Mislain)</label>
+                </div>
+                <div class="feedback-box" id="fb_tj3"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">4. وَمَا صَاحِبُهُم بِمَجْنُونٍ</p>
+                <div class="options-grid">
+                    <label><input type="radio" name="tj4" value="Ikhfa' Syafawi" onclick="playPopSound()"> اخفاء شفوي (Ikhfa' Syafawi)</label>
+                    <label><input type="radio" name="tj4" value="Idgham Mislain" onclick="playPopSound()"> ادغام مثلين (Idgham Mislain)</label>
+                </div>
+                <div class="feedback-box" id="fb_tj4"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">5. فَاحْكُم بَيْنَهُم</p>
+                <div class="options-grid">
+                    <label><input type="radio" name="tj5" value="Ikhfa' Syafawi" onclick="playPopSound()"> اخفاء شفوي (Ikhfa' Syafawi)</label>
+                    <label><input type="radio" name="tj5" value="Idgham Mislain" onclick="playPopSound()"> ادغام مثلين (Idgham Mislain)</label>
+                </div>
+                <div class="feedback-box" id="fb_tj5"></div>
+            </div>
+
+            <!-- BAHAGIAN 3: KEFAHAMAN SURAH AL-IKHLAS -->
+            <div class="section-title">
+                <span>(3) القرءان (كفهمن) - سورة الإخلاص</span>
+                <span>10 Markah</span>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">1. سورة الإخلاص منچريتاكن تنتڠ _____ دان كسمڤورناءن الله.</p>
+                <span class="rumi-hint">Surah Al-Ikhlas menceritakan tentang _____ dan kesempurnaan Allah:</span>
+                <select id="kf1" onchange="playPopSound()">
+                    <option value="">-- فيليه جواڤن --</option>
+                    <option value="كأسان">كأسان (Keesaan)</option>
+                    <option value="اخلاص">اخلاص (Ikhlas)</option>
+                    <option value="فرتولوغن">فرتولوغن (Pertolongan)</option>
+                    <option value="دوسا">دوسا (Dosa)</option>
+                    <option value="برشکور">برشکور (Bersyukur)</option>
+                </select>
+                <div class="feedback-box" id="fb_kf1"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">2. اورڠ يڠ برايمان دغن الله اكن سنتياس _____ دالم برعبادة.</p>
+                <span class="rumi-hint">Orang yang beriman dengan Allah akan sentiasa _____ dalam beribadah:</span>
+                <select id="kf2" onchange="playPopSound()">
+                    <option value="">-- فيليه جواڤن --</option>
+                    <option value="اخلاص">اخلاص (Ikhlas)</option>
+                    <option value="كأسان">كأسان (Keesaan)</option>
+                    <option value="فرتولوغن">فرتولوغن (Pertolongan)</option>
+                    <option value="برشکور">برشکور (Bersyukur)</option>
+                </select>
+                <div class="feedback-box" id="fb_kf2"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">3. هاڽ كڤد الله سهاج تمڤت اونتوق ممينتا _____.</p>
+                <span class="rumi-hint">Hanya kepada Allah sahaja tempat untuk meminta _____:</span>
+                <select id="kf3" onchange="playPopSound()">
+                    <option value="">-- فيليه جواڤن --</option>
+                    <option value="فرتولوغن">فرتولوغن (Pertolongan)</option>
+                    <option value="اخلاص">اخلاص (Ikhlas)</option>
+                    <option value="كأسان">كأسان (Keesaan)</option>
+                    <option value="دوسا">دوسا (Dosa)</option>
+                </select>
+                <div class="feedback-box" id="fb_kf3"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">4. الله مڠامڤونكن _____ اورڠ يڠ مڠعملكن سورة الإخلاص.</p>
+                <span class="rumi-hint">Allah mengampunkan _____ orang yang mengamalkan Surah Al-Ikhlas:</span>
+                <select id="kf4" onchange="playPopSound()">
+                    <option value="">-- فيليه جواڤن --</option>
+                    <option value="دوسا">دوسا (Dosa)</option>
+                    <option value="فرتولوغن">فرتولوغن (Pertolongan)</option>
+                    <option value="اخلاص">اخلاص (Ikhlas)</option>
+                    <option value="برشکور">برشکور (Bersyukur)</option>
+                </select>
+                <div class="feedback-box" id="fb_kf4"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">5. كيت مستي _____ اتس نعمت كورنياءن الله.</p>
+                <span class="rumi-hint">Kita mesti _____ atas nikmat kurniaan Allah:</span>
+                <select id="kf5" onchange="playPopSound()">
+                    <option value="">-- فيليه جواڤن --</option>
+                    <option value="برشکور">برشکور (Bersyukur)</option>
+                    <option value="دوسا">دوسا (Dosa)</option>
+                    <option value="اخلاص">اخلاص (Ikhlas)</option>
+                    <option value="فرتولوغن">فرتولوغن (Pertolongan)</option>
+                </select>
+                <div class="feedback-box" id="fb_kf5"></div>
+            </div>
+
+            <!-- BAHAGIAN 4: HADITH MEMULIAKAN TETAMU -->
+            <div class="section-title">
+                <span>(4) حديث - ممولياكن تتامو</span>
+                <span>10 Markah</span>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">1. حكوم ملايني تتامو اياله هاروس.</p>
+                <span class="rumi-hint">Hukum melayani tetamu ialah harus:</span>
+                <div class="options-grid">
+                    <label><input type="radio" name="hd1" value="Betul" onclick="playPopSound()"> ✔ بتول (Betul)</label>
+                    <label><input type="radio" name="hd1" value="Salah" onclick="playPopSound()"> ✖ ساله (Salah)</label>
+                </div>
+                <div class="feedback-box" id="fb_hd1"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">2. كيت مستي ڽمبوت كداتڠن تتامو دغن مسرا دان ݢمبيرا.</p>
+                <span class="rumi-hint">Kita mesti menyambut kedatangan tetamu dengan mesra dan gembira:</span>
+                <div class="options-grid">
+                    <label><input type="radio" name="hd2" value="Betul" onclick="playPopSound()"> ✔ بتول (Betul)</label>
+                    <label><input type="radio" name="hd2" value="Salah" onclick="playPopSound()"> ✖ ساله (Salah)</label>
+                </div>
+                <div class="feedback-box" id="fb_hd2"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">3. اورڠ يڠ ممولياكن تتامو اكن درحمتي الله دان داڤت ڤهالا.</p>
+                <span class="rumi-hint">Orang yang memuliakan tetamu akan dirahmati Allah dan dapat pahala:</span>
+                <div class="options-grid">
+                    <label><input type="radio" name="hd3" value="Betul" onclick="playPopSound()"> ✔ بتول (Betul)</label>
+                    <label><input type="radio" name="hd3" value="Salah" onclick="playPopSound()"> ✖ ساله (Salah)</label>
+                </div>
+                <div class="feedback-box" id="fb_hd3"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">4. سكيران كيت ملاين تتامو دغن اخلاص، هوبوڠن صلة الرحيم اكن ترڤوتوس.</p>
+                <span class="rumi-hint">Sekiranya kita melayan tetamu dengan ikhlas, hubungan silaturrahim akan terputus:</span>
+                <div class="options-grid">
+                    <label><input type="radio" name="hd4" value="Betul" onclick="playPopSound()"> ✔ بتول (Betul)</label>
+                    <label><input type="radio" name="hd4" value="Salah" onclick="playPopSound()"> ✖ ساله (Salah)</label>
+                </div>
+                <div class="feedback-box" id="fb_hd4"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">5. كاسيه سايڠ اكن وجود اڤابيلا كيت ممبري لاينن يڠ باءيق ترهادڤ تتامو.</p>
+                <span class="rumi-hint">Kasih sayang akan wujud apabila kita memberi layanan yang baik terhadap tetamu:</span>
+                <div class="options-grid">
+                    <label><input type="radio" name="hd5" value="Betul" onclick="playPopSound()"> ✔ بتول (Betul)</label>
+                    <label><input type="radio" name="hd5" value="Salah" onclick="playPopSound()"> ✖ ساله (Salah)</label>
+                </div>
+                <div class="feedback-box" id="fb_hd5"></div>
+            </div>
+
+            <!-- BAHAGIAN 5: ADAB BERJIRAN & BERGURU -->
+            <div class="section-title">
+                <span>(5) ادب برجيرن دان برݢورو</span>
+                <span>10 Markah</span>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">1. كيت مستي مڠحرمتي عادت، بودايا دان اݢام جيرن كيت.</p>
+                <span class="rumi-hint">Kita mesti menghormati adat, budaya dan agama jiran kita:</span>
+                <div class="options-grid">
+                    <label><input type="radio" name="ad1" value="Betul" onclick="playPopSound()"> بتول (Betul)</label>
+                    <label><input type="radio" name="ad1" value="Salah" onclick="playPopSound()"> ساله (Salah)</label>
+                </div>
+                <div class="feedback-box" id="fb_ad1"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">2. رسول الله سنتياس بربوات باءيق دغن جيرن دان تيدق ڤرنه مڽاكيتي مريك والاوفون جيرنن سأورڠ يهودي.</p>
+                <span class="rumi-hint">Rasulullah sentiasa berbuat baik dengan jiran dan tidak pernah menyakiti mereka walaupun jirannya seorang Yahudi:</span>
+                <div class="options-grid">
+                    <label><input type="radio" name="ad2" value="Betul" onclick="playPopSound()"> بتول (Betul)</label>
+                    <label><input type="radio" name="ad2" value="Salah" onclick="playPopSound()"> ساله (Salah)</label>
+                </div>
+                <div class="feedback-box" id="fb_ad2"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">3. ݢجالا نيݢاتيف اكن برللوءاسا سكيران كيت مڠعملكن ادب برجيرن.</p>
+                <span class="rumi-hint">Gejala negatif akan berleluasa sekiranya kita mengamalkan adab berjiran:</span>
+                <div class="options-grid">
+                    <label><input type="radio" name="ad3" value="Betul" onclick="playPopSound()"> بتول (Betul)</label>
+                    <label><input type="radio" name="ad3" value="Salah" onclick="playPopSound()"> ساله (Salah)</label>
+                </div>
+                <div class="feedback-box" id="fb_ad3"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">4. موريد ڤرلو ممبري تومڤوان كتيك ݢورو مڠاجر.</p>
+                <span class="rumi-hint">Murid perlu memberi tumpuan ketika guru mengajar:</span>
+                <div class="options-grid">
+                    <label><input type="radio" name="ad4" value="Betul" onclick="playPopSound()"> بتول (Betul)</label>
+                    <label><input type="radio" name="ad4" value="Salah" onclick="playPopSound()"> ساله (Salah)</label>
+                </div>
+                <div class="feedback-box" id="fb_ad4"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">5. كيت تيدق اكن منداڤت كبركتن علمو سكيران كيت مڠحرمتي ݢورو.</p>
+                <span class="rumi-hint">Kita tidak akan mendapat keberkatan ilmu sekiranya kita menghormati guru:</span>
+                <div class="options-grid">
+                    <label><input type="radio" name="ad5" value="Betul" onclick="playPopSound()"> بتول (Betul)</label>
+                    <label><input type="radio" name="ad5" value="Salah" onclick="playPopSound()"> ساله (Salah)</label>
+                </div>
+                <div class="feedback-box" id="fb_ad5"></div>
+            </div>
+
+            <!-- BAHAGIAN 6: AKIDAH (KUFUR) -->
+            <div class="section-title">
+                <span>(6) عقيدة - كفور</span>
+                <span>10 Markah</span>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">1. كفور برمقصود _____ كڤد الله دان نبي محمد ﷺ.</p>
+                <span class="rumi-hint">Kufur bermaksud _____ kepada Allah dan Nabi Muhammad SAW:</span>
+                <select id="ak1" onchange="playPopSound()">
+                    <option value="">-- فيليه --</option>
+                    <option value="تيدق برایمان">تيدق برایمان (Tidak beriman)</option>
+                    <option value="فرچاي">فرچاي (Percaya)</option>
+                </select>
+                <div class="feedback-box" id="fb_ak1"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">2. حكوم كفور اداله _____ برداسركن فرمان الله دالم سورة النساء اية 136.</p>
+                <span class="rumi-hint">Hukum kufur adalah _____ berdasarkan firman Allah dalam Surah An-Nisa ayat 136:</span>
+                <select id="ak2" onchange="playPopSound()">
+                    <option value="">-- فيليه --</option>
+                    <option value="سست">سست (Sesat)</option>
+                    <option value="بنر">بنر (Benar)</option>
+                </select>
+                <div class="feedback-box" id="fb_ak2"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">3. كفور _____ اياله منافيكن اجرن إسلام يڠ دباوا اوليه نبي محمد ﷺ.</p>
+                <span class="rumi-hint">Kufur _____ ialah menafikan ajaran Islam yang dibawa oleh Nabi Muhammad SAW:</span>
+                <select id="ak3" onchange="playPopSound()">
+                    <option value="">-- فيليه --</option>
+                    <option value="اعتقاد">اعتقاد (Iktikad)</option>
+                    <option value="عملن">عملن (Amalan)</option>
+                </select>
+                <div class="feedback-box" id="fb_ak3"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">4. اورڠ يڠ كفور دسببكن اوليه ڤݢڠن اݢام يڠ _____ دالم كهيدوڤن.</p>
+                <span class="rumi-hint">Orang yang kufur disebabkan oleh pegangan agama yang _____ dalam kehidupan:</span>
+                <select id="ak4" onchange="playPopSound()">
+                    <option value="">-- فيليه --</option>
+                    <option value="لمه">لمه (Lemah)</option>
+                    <option value="قوات">قوات (Kuat)</option>
+                </select>
+                <div class="feedback-box" id="fb_ak4"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">5. منجاݢ عمل دان عبادة مروڤاكن تيندقن اونتوق _____ كفور.</p>
+                <span class="rumi-hint">Menjaga amal dan ibadat merupakan tindakan untuk _____ kufur:</span>
+                <select id="ak5" onchange="playPopSound()">
+                    <option value="">-- فيليه --</option>
+                    <option value="منجا وهي">منجاوهي (Menjauhi)</option>
+                    <option value="معهمقيري">مغهامڤيري (Menghampiri)</option>
+                </select>
+                <div class="feedback-box" id="fb_ak5"></div>
+            </div>
+
+            <!-- BAHAGIAN 7: SIRAH DAKWAH NABI -->
+            <div class="section-title">
+                <span>(7) سيرة - دعوه نبي دان فمبوكاءن كوتا مكة</span>
+                <span>10 Markah</span>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">1. دعوه برمقصود _____ اتاو مڠاجق اومت ماءنسي اونتوق _____ دان طاعة كڤد الله.</p>
+                <span class="rumi-hint">Dakwah bermaksud menyeru atau mengajak manusia untuk beriman dan taat kepada Allah:</span>
+                <div style="margin-bottom:8px;">
+                    (a) Maksud dakwah:
+                    <select id="sr1_a" onchange="playPopSound()">
+                        <option value="">-- فيليه --</option>
+                        <option value="مپرو">مپرو (Menyeru)</option>
+                        <option value="برصبر">برصبر (Bersabar)</option>
+                        <option value="سوليت">سوليت (Sulit)</option>
+                    </select>
+                    <div class="feedback-box" id="fb_sr1_a"></div>
+                </div>
+                <div>
+                    (b) Mengajak untuk:
+                    <select id="sr1_b" onchange="playPopSound()">
+                        <option value="">-- فيليه --</option>
+                        <option value="برایمان">برایمان (Beriman)</option>
+                        <option value="فوتوس اس">فوتوس اس (Putus asa)</option>
+                    </select>
+                    <div class="feedback-box" id="fb_sr1_b"></div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">2. نبي محمد ﷺ بردعوه د مكة سجارا _____ سلاما تيݢ تاهون.</p>
+                <span class="rumi-hint">Nabi Muhammad SAW berdakwah di Mekah secara _____ selama 3 tahun:</span>
+                <select id="sr2" onchange="playPopSound()">
+                    <option value="">-- فيليه --</option>
+                    <option value="سوليت">سوليت (Sulit / Rahsia)</option>
+                    <option value="تربوك">تربوك (Terbuka)</option>
+                </select>
+                <div class="feedback-box" id="fb_sr2"></div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">3. اورڠ _____ منودوه نبي محمد ﷺ سباݢاي ݢيلا، اهلي سيحير دان _____.</p>
+                <span class="rumi-hint">Orang Quraisy menuduh Nabi sebagai gila, ahli sihir dan pendusta:</span>
+                <div style="margin-bottom:8px;">
+                    (a) Kaum yang menuduh:
+                    <select id="sr3_a" onchange="playPopSound()">
+                        <option value="">-- فيليه --</option>
+                        <option value="قريش">قريش (Quraisy)</option>
+                        <option value="مكة">مكة (Mekah)</option>
+                    </select>
+                    <div class="feedback-box" id="fb_sr3_a"></div>
+                </div>
+                <div>
+                    (b) Dituduh sebagai:
+                    <select id="sr3_b" onchange="playPopSound()">
+                        <option value="">-- فيليه --</option>
+                        <option value="فندوستا">فندوستا (Pendusta)</option>
+                        <option value="برصبر">برصبر (Bersabar)</option>
+                    </select>
+                    <div class="feedback-box" id="fb_sr3_b"></div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">4. نبي محمد ﷺ سنتياس _____ دان تيدق ڤرنه _____ دالم مڠهادڤي تنتڠن قوم قريش.</p>
+                <span class="rumi-hint">Nabi sentiasa bersabar dan tidak pernah putus asa:</span>
+                <div style="margin-bottom:8px;">
+                    (a) Nabi sentiasa:
+                    <select id="sr4_a" onchange="playPopSound()">
+                        <option value="">-- فيليه --</option>
+                        <option value="برصبر">برصبر (Bersabar)</option>
+                        <option value="فوتوس اس">فوتوس اس (Putus asa)</option>
+                    </select>
+                    <div class="feedback-box" id="fb_sr4_a"></div>
+                </div>
+                <div>
+                    (b) Tidak pernah:
+                    <select id="sr4_b" onchange="playPopSound()">
+                        <option value="">-- فيليه --</option>
+                        <option value="فوتوس اس">فوتوس اس (Putus asa)</option>
+                        <option value="ممعافكن">ممعافكن (Memaafkan)</option>
+                    </select>
+                    <div class="feedback-box" id="fb_sr4_b"></div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">5. سماس ڤريستيوا ڤمبوكاءن كوتا مكة، نبي محمد ﷺ تله _____ ڤندودوق مكة دان _____ مريك.</p>
+                <span class="rumi-hint">Nabi memaafkan dan membebaskan penduduk Mekah:</span>
+                <div style="margin-bottom:8px;">
+                    (a) Tindakan Nabi:
+                    <select id="sr5_a" onchange="playPopSound()">
+                        <option value="">-- فيليه --</option>
+                        <option value="ممعافكن">ممعافكن (Memaafkan)</option>
+                        <option value="ممبيبسكن">ممبيبسكن (Membebaskan)</option>
+                    </select>
+                    <div class="feedback-box" id="fb_sr5_a"></div>
+                </div>
+                <div>
+                    (b) Dan juga:
+                    <select id="sr5_b" onchange="playPopSound()">
+                        <option value="">-- فيليه --</option>
+                        <option value="ممبيبسكن">ممبيبسكن (Membebaskan)</option>
+                        <option value="مپرو">مپرو (Menyeru)</option>
+                    </select>
+                    <div class="feedback-box" id="fb_sr5_b"></div>
+                </div>
+            </div>
+
+            <!-- BAHAGIAN 8: JAWI (SAMBUNG HURUF & RUMIKAN) -->
+            <div class="section-title">
+                <span>(8) جاوي - سمبوڠ حروف دان روميكن</span>
+                <span>20 Markah</span>
+            </div>
+
+            <!-- SAMBUNG HURUF (10 MARKAH) -->
+            <div class="question-card">
+                <p><strong>A. Sambungkan huruf-huruf di bawah (10 Markah):</strong></p>
+                <div style="margin-bottom: 10px;">
+                    (1) د م ك ي ن :
+                    <select id="jw1" onchange="playPopSound()">
+                        <option value="">-- فيليه فركاتان يغ بتول --</option>
+                        <option value="دميكين">دميكين</option>
+                        <option value="دمكاين">دمكاين</option>
+                    </select>
+                    <div class="feedback-box" id="fb_jw1"></div>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    (2) ج ك ا ل ا و :
+                    <select id="jw2" onchange="playPopSound()">
+                        <option value="">-- فيليه فركاتان يغ بتول --</option>
+                        <option value="جكالو">جكالو</option>
+                        <option value="جكالاو">جكالاو</option>
+                    </select>
+                    <div class="feedback-box" id="fb_jw2"></div>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    (3) ت ي ا د :
+                    <select id="jw3" onchange="playPopSound()">
+                        <option value="">-- فيليه فركاتان يغ بتول --</option>
+                        <option value="تياد">تياد</option>
+                        <option value="تيادا">تيادا</option>
+                    </select>
+                    <div class="feedback-box" id="fb_jw3"></div>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    (4) م ا ن س ي :
+                    <select id="jw4" onchange="playPopSound()">
+                        <option value="">-- فيليه فركاتان يغ بتول --</option>
+                        <option value="مانسي">مانسي (ماءنسي)</option>
+                        <option value="منسي">منسي</option>
+                    </select>
+                    <div class="feedback-box" id="fb_jw4"></div>
+                </div>
+                <div>
+                    (5) ش ر گ :
+                    <select id="jw5" onchange="playPopSound()">
+                        <option value="">-- فيليه فركاتان يغ بتول --</option>
+                        <option value="شرݢ">شرݢ</option>
+                        <option value="شروݢ">شروݢ</option>
+                    </select>
+                    <div class="feedback-box" id="fb_jw5"></div>
+                </div>
+            </div>
+
+            <!-- RUMIKAN (10 MARKAH) -->
+            <div class="question-card">
+                <p><strong>B. Rumikan perkataan bergaris (10 Markah):</strong></p>
+                <div style="margin-bottom: 12px;">
+                    <p class="jawi-text">1. رملي تله مندافت <u>تاجان</u> اونتوق ميمبوغ فغاجين دلوار نكارا.</p>
+                    <input type="text" id="rm1" placeholder="Taip perkataan rumi di sini..." oninput="playTypingSound()">
+                    <div class="feedback-box" id="fb_rm1"></div>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <p class="jawi-text">2. احمد ملالوي جالن يغ <u>سويي</u> ايت اونتوق كسكوله.</p>
+                    <input type="text" id="rm2" placeholder="Taip perkataan rumi di sini..." oninput="playTypingSound()">
+                    <div class="feedback-box" id="fb_rm2"></div>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <p class="jawi-text">3. ساي ممباچ دعاء سبلوم <u>تيدور</u>.</p>
+                    <input type="text" id="rm3" placeholder="Taip perkataan rumi di sini..." oninput="playTypingSound()">
+                    <div class="feedback-box" id="fb_rm3"></div>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <p class="jawi-text">4. توݢس ملائكة جبرائيل اياله منورونكن <u>رزقي</u>.</p>
+                    <input type="text" id="rm4" placeholder="Taip perkataan rumi di sini..." oninput="playTypingSound()">
+                    <div class="feedback-box" id="fb_rm4"></div>
+                </div>
+                <div>
+                    <p class="jawi-text">5. سلمة ممبلي <u>سأيكت</u> رمبوتن دفاسر.</p>
+                    <input type="text" id="rm5" placeholder="Taip perkataan rumi di sini..." oninput="playTypingSound()">
+                    <div class="feedback-box" id="fb_rm5"></div>
+                </div>
+            </div>
+
+            <button type="button" class="btn-submit" onclick="semakMarkah()">Hantar & Semak Markah Serta-Merta 🎯</button>
+        </form>
+    </div>
+
+    <!-- MODAL PAPARAN MARKAH -->
+    <div id="resultModal" class="modal">
+        <div class="modal-card">
+            <h2 id="modalTitle" style="color:var(--primary); margin:0 0 10px 0;">Keputusan Peperiksaan</h2>
+            <div class="score-circle">
+                <span class="score-number" id="skorBesar">0</span>
+                <span class="score-total">/ 40 Soalan</span>
+            </div>
+            <div id="gradeBadge" class="grade-badge grade-A">Gred A</div>
+            <p id="peratusText" style="font-weight: bold; color: #4b5563; margin: 5px 0 15px 0;">Peratusan: 0%</p>
+            <p id="pesananText" style="font-size: 0.95em; color: #64748b; line-height: 1.4; margin-bottom: 20px;">بارك الله فيك!</p>
+            
+            <button class="btn-submit" style="margin: 0; padding: 12px 25px; font-size: 1.1em;" onclick="tutupModal()">Lihat Semakan Jawapan 🔎</button>
+        </div>
+    </div>
+
+    <script>
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+        function initAudio() { if (!audioCtx) audioCtx = new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
+
+        function playPopSound() {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(450, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(650, audioCtx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.08);
+        }
+
+        let typingTimer;
+        function playTypingSound() {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(300, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+            }, 60);
+        }
+
+        function playVictorySound() {
+            initAudio();
+            const notes = [523, 659, 784, 1046];
+            let startTime = audioCtx.currentTime;
+            notes.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                osc.type = 'triangle'; osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.12, startTime + (i * 0.12));
+                gain.gain.setTargetAtTime(0, startTime + (i * 0.12) + 0.12, 0.12);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(startTime + (i * 0.12)); osc.stop(startTime + (i * 0.12) + 0.5);
+            });
+        }
+
+        function semakMarkah() {
+            let skor = 0;
+
+            const skema = {
+                // 1. Hafazan
+                h1: "أَدْرَاكَ",
+                h2: "الْمَبْثُوثِ",
+                h3: "كَالْعِهْنِ",
+                h4: "فَأَمَّا",
+                h5: "عِيشَةٍ",
+
+                // 2. Tajwid
+                tj1: "Ikhfa' Syafawi",
+                tj2: "Idgham Mislain",
+                tj3: "Idgham Mislain",
+                tj4: "Ikhfa' Syafawi",
+                tj5: "Ikhfa' Syafawi",
+
+                // 3. Kefahaman Al-Ikhlas
+                kf1: "كأسان",
+                kf2: "اخلاص",
+                kf3: "فرتولوغن",
+                kf4: "دوسا",
+                kf5: "برشکور",
+
+                // 4. Hadith
+                hd1: "Salah",
+                hd2: "Betul",
+                hd3: "Betul",
+                hd4: "Salah",
+                hd5: "Betul",
+
+                // 5. Adab
+                ad1: "Betul",
+                ad2: "Betul",
+                ad3: "Salah",
+                ad4: "Betul",
+                ad5: "Salah",
+
+                // 6. Akidah (Kufur)
+                ak1: "تيدق برایمان",
+                ak2: "سست",
+                ak3: "اعتقاد",
+                ak4: "لمه",
+                ak5: "منجا وهي",
+
+                // 7. Sirah
+                sr1_a: "مپرو",
+                sr1_b: "برایمان",
+                sr2: "سوليت",
+                sr3_a: "قريش",
+                sr3_b: "فندوستا",
+                sr4_a: "برصبر",
+                sr4_b: "فوتوس اس",
+                sr5_a: "ممعافكن",
+                sr5_b: "ممبيبسكن",
+
+                // 8. Jawi - Sambung
+                jw1: "دميكين",
+                jw2: "جكالو",
+                jw3: "تياد",
+                jw4: "مانسي",
+                jw5: "شرݢ"
+            };
+
+            const skemaRumi = {
+                rm1: ["tajaan"],
+                rm2: ["sunyi"],
+                rm3: ["tidur"],
+                rm4: ["rezeki", "rejeki"],
+                rm5: ["seikat"]
+            };
+
+            const totalSoalan = Object.keys(skema).length + Object.keys(skemaRumi).length; // 40 soalan
+
+            // Semak pilihan radio & select
+            for (let [id, ans] of Object.entries(skema)) {
+                let userVal = "";
+                const selectElem = document.getElementById(id);
+
+                if (selectElem) {
+                    userVal = selectElem.value.trim();
+                } else {
+                    const radios = document.getElementsByName(id);
+                    for (let r of radios) {
+                        if (r.checked) userVal = r.value;
+                    }
+                }
+
+                const fb = document.getElementById(`fb_${id}`);
+                fb.style.display = "block";
+
+                if (userVal === ans) {
+                    skor++;
+                    fb.className = "feedback-box feedback-correct";
+                    fb.innerHTML = `✔ Betul! (+1 Markah)`;
+                } else {
+                    fb.className = "feedback-box feedback-wrong";
+                    fb.innerHTML = `✖ Salah. Jawapan sebenar: <strong>${ans}</strong>`;
+                }
+            }
+
+            // Semak jawapan rumi
+            for (let [id, acceptedList] of Object.entries(skemaRumi)) {
+                const elem = document.getElementById(id);
+                const userVal = elem ? elem.value.trim().toLowerCase() : "";
+                const fb = document.getElementById(`fb_${id}`);
+                fb.style.display = "block";
+
+                if (acceptedList.includes(userVal)) {
+                    skor++;
+                    fb.className = "feedback-box feedback-correct";
+                    fb.innerHTML = `✔ Betul! (+1 Markah)`;
+                } else {
+                    fb.className = "feedback-box feedback-wrong";
+                    fb.innerHTML = `✖ Salah. Jawapan yang betul: <strong>${acceptedList[0]}</strong>`;
+                }
+            }
+
+            const peratus = Math.round((skor / totalSoalan) * 100);
+            document.getElementById('skorBesar').innerText = skor;
+            document.getElementById('peratusText').innerText = `Peratusan: ${peratus}% (${skor} / ${totalSoalan} Markah)`;
+
+            const badge = document.getElementById('gradeBadge');
+            const pesan = document.getElementById('pesananText');
+
+            if (peratus >= 80) {
+                badge.className = "grade-badge grade-A"; badge.innerText = "Gred A — Cemerlang! 🌟";
+                pesan.innerText = "بارك الله فيك! Pemahaman Pendidikan Islam Tahun 4 sangat cemerlang!";
+                confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
+            } else if (peratus >= 65) {
+                badge.className = "grade-badge grade-B"; badge.innerText = "Gred B — Baik 👍";
+                pesan.innerText = "Alhamdulillah! Usaha yang sangat baik. Ulang kaji untuk dapat A!";
+            } else if (peratus >= 50) {
+                badge.className = "grade-badge grade-C"; badge.innerText = "Gred C — Lulus ✅";
+                pesan.innerText = "Lulus. Boleh diperbaiki lagi dengan merujuk pembetulan soalan.";
+            } else {
+                badge.className = "grade-badge grade-D"; badge.innerText = "Perlu Bimbingan 📖";
+                pesan.innerText = "Teruskan berusaha! Semak jawapan yang betul di bawah.";
+            }
+
+            playVictorySound();
+            document.getElementById('resultModal').style.display = 'flex';
+        }
+
+        function tutupModal() {
+            document.getElementById('resultModal').style.display = 'none';
+            window.scrollTo({ top: 300, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

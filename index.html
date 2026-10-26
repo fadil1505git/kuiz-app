@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Pembelajaran Pintar</title>
-    <!-- Muat turun pustaka PDF.js dan Canvas Confetti -->
+    <!-- PDF.js & Canvas Confetti -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
@@ -16,6 +16,7 @@
             --text: #2b2d42; 
             --accent: #4ecdc4; 
             --islamic: #059669;
+            --blue: #0284c7;
         }
         body { 
             font-family: 'Nunito', system-ui, sans-serif; 
@@ -41,16 +42,13 @@
             margin: 0; 
             font-weight: 900; 
             font-size: 2.1em; 
+            letter-spacing: -0.5px;
         }
-        .version-badge {
-            display: inline-block;
-            background: #e0e7ff;
-            color: #3730a3;
-            font-size: 11px;
+        .header p {
+            margin: 4px 0 0 0;
+            color: #6b7280;
+            font-size: 0.95em;
             font-weight: bold;
-            padding: 3px 10px;
-            border-radius: 20px;
-            margin-top: 4px;
         }
         .btn-settings { 
             position: absolute; 
@@ -64,7 +62,7 @@
             cursor: pointer; 
             font-weight: bold; 
             font-family: 'Nunito', sans-serif;
-            transition: transform 0.2s, background 0.2s; 
+            transition: all 0.2s; 
         }
         .btn-settings:hover { 
             transform: scale(1.05); 
@@ -72,7 +70,7 @@
         }
         
         .container { 
-            max-width: 1100px; 
+            max-width: 1050px; 
             margin: 25px auto; 
             padding: 0 20px; 
         }
@@ -98,7 +96,7 @@
         /* Upload Section */
         .upload-section { 
             background: rgba(255,255,255,0.96); 
-            padding: 28px; 
+            padding: 26px; 
             border-radius: 18px; 
             text-align: center; 
             border: 3px dashed var(--accent); 
@@ -107,14 +105,14 @@
         }
         .upload-section h3 { 
             color: var(--accent); 
-            margin: 0 0 8px 0; 
-            font-size: 1.5em; 
+            margin: 0 0 6px 0; 
+            font-size: 1.45em; 
             font-weight: 900;
         }
         .upload-desc {
             color: #64748b;
             font-size: 0.95em;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             font-weight: bold;
         }
         
@@ -127,30 +125,23 @@
             cursor: pointer; 
             font-size: 16px; 
             font-weight: bold; 
-            margin-top: 15px; 
-            transition: transform 0.2s, box-shadow 0.2s; 
+            margin-top: 10px; 
+            transition: transform 0.2s; 
             box-shadow: 0 4px 12px rgba(255,107,107,0.35); 
             font-family: 'Nunito', sans-serif;
         }
-        .btn:hover { 
-            transform: scale(1.04); 
-            box-shadow: 0 6px 18px rgba(255,107,107,0.45);
-        }
+        .btn:hover { transform: scale(1.04); }
         .btn-tutup { 
             background: #94a3b8; 
             color: white; 
             border: none; 
-            padding: 8px 18px; 
+            padding: 8px 16px; 
             border-radius: 8px; 
             cursor: pointer; 
             font-weight: bold; 
             font-family: 'Nunito', sans-serif; 
-            transition: all 0.2s; 
         }
-        .btn-tutup:hover { 
-            background: #64748b; 
-            transform: scale(1.05); 
-        }
+        .btn-tutup:hover { background: #64748b; }
         
         .loading { 
             display: none; 
@@ -174,8 +165,6 @@
         @media (min-width: 850px) { 
             .workspace { flex-direction: row; align-items: flex-start; } 
         }
-        
-        /* PDF Viewer Left Side */
         .pdf-panel { 
             flex: 1; 
             background: #1e293b; 
@@ -186,22 +175,8 @@
             box-shadow: inset 0 0 20px rgba(0,0,0,0.5); 
             text-align: center;
         }
-        .pdf-panel h3 { 
-            color: white; 
-            margin-top: 0; 
-            border-bottom: 2px solid #334155; 
-            padding-bottom: 10px;
-        }
-        .pdf-page-canvas { 
-            max-width: 100%; 
-            height: auto; 
-            margin-bottom: 15px; 
-            border-radius: 8px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
-            background: white;
-        }
-        
-        /* AI Quiz Right Side */
+        .pdf-panel h3 { color: white; margin-top: 0; border-bottom: 2px solid #334155; padding-bottom: 10px; }
+        .pdf-page-canvas { max-width: 100%; height: auto; margin-bottom: 15px; border-radius: 8px; background: white; }
         .quiz-panel { 
             flex: 1.1; 
             background: rgba(255,255,255,0.98); 
@@ -213,72 +188,9 @@
             border-top: 6px solid var(--primary);
         }
         
-        /* AI Generated Form Styles */
-        #aiForm h3 { 
-            color: var(--accent); 
-            border-bottom: 3px dashed var(--accent); 
-            padding-bottom: 10px; 
-            font-size: 1.4em; 
-            margin-top: 0; 
-        }
-        .question { 
-            margin-bottom: 22px; 
-            padding: 18px; 
-            background: #f8fafc; 
-            border-radius: 12px; 
-            border-left: 6px solid var(--accent); 
-            box-shadow: 0 2px 6px rgba(0,0,0,0.03); 
-        }
-        .question p { 
-            font-weight: bold; 
-            font-size: 1.05em; 
-            color: var(--text); 
-            margin-top: 0; 
-        }
-        .rujukan-nota { 
-            color: #ef4444; 
-            font-size: 0.9em; 
-            font-style: italic; 
-            display: block; 
-            margin-top: 5px; 
-        }
-        label { 
-            display: block; 
-            margin-bottom: 10px; 
-            cursor: pointer; 
-            padding: 10px 14px; 
-            background: white; 
-            border-radius: 8px; 
-            transition: all 0.2s; 
-            border: 2px solid #e2e8f0; 
-        }
-        label:hover { 
-            background: #ecfdf5; 
-            border-color: var(--accent); 
-        }
-        input[type="radio"] { 
-            transform: scale(1.25); 
-            margin-right: 10px; 
-            accent-color: var(--accent); 
-        }
-        input[type="text"], textarea { 
-            width: 100%; 
-            padding: 12px; 
-            border: 2px solid #cbd5e1; 
-            border-radius: 8px; 
-            font-family: 'Nunito', sans-serif; 
-            margin-top: 8px; 
-            box-sizing: border-box; 
-            transition: border 0.3s; 
-        }
-        input[type="text"]:focus, textarea:focus { 
-            outline: none; 
-            border-color: var(--accent); 
-        }
-
         /* Cards Grid */
         .section-heading {
-            font-size: 1.5em;
+            font-size: 1.45em;
             font-weight: 900;
             color: #1e293b;
             margin-bottom: 18px;
@@ -306,9 +218,10 @@
             justify-content: space-between;
             border-top: 6px solid var(--primary);
         }
-        .quiz-card.card-islam {
-            border-top-color: var(--islamic);
-        }
+        .quiz-card.card-sejarah { border-top-color: var(--primary); }
+        .quiz-card.card-pi4 { border-top-color: var(--blue); }
+        .quiz-card.card-pi5 { border-top-color: var(--islamic); }
+        
         .quiz-card:hover { 
             transform: translateY(-6px); 
             box-shadow: 0 12px 25px rgba(0,0,0,0.12); 
@@ -323,7 +236,8 @@
             text-transform: uppercase;
         }
         .badge-sejarah { background: #fee2e2; color: #991b1b; }
-        .badge-islam { background: #d1fae5; color: #065f46; }
+        .badge-pi4 { background: #e0f2fe; color: #0369a1; }
+        .badge-pi5 { background: #d1fae5; color: #065f46; }
         
         .card-title {
             font-size: 1.35em;
@@ -339,13 +253,12 @@
         }
         .card-action {
             margin-top: 18px;
-            color: var(--primary);
             font-weight: 900;
             font-size: 0.95em;
         }
-        .card-islam .card-action {
-            color: var(--islamic);
-        }
+        .card-sejarah .card-action { color: var(--primary); }
+        .card-pi4 .card-action { color: var(--blue); }
+        .card-pi5 .card-action { color: var(--islamic); }
         
         /* Modals */
         .modal { 
@@ -364,77 +277,78 @@
             border-radius: 20px; 
             max-width: 480px; 
             width: 90%; 
-            animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             box-sizing: border-box;
         }
-        @keyframes popIn { 0% { transform: scale(0.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🎮 Portal Pembelajaran Pintar</h1>
-        <div><span class="version-badge">Versi 4.0 — Model Gemini 3.8 Flash Ready</span></div>
+        <p>Aplikasi Kuiz & Semakan Markah Automatik untuk Anak</p>
         <button class="btn-settings" onclick="bukaTetapan()">⚙️ Tetapan API & Model</button>
     </div>
 
     <div class="container" id="mainContainer">
-        <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Cari kertas soalan (Cth: Sejarah, Pendidikan Islam)..." onkeyup="filterQuizzes()">
+        <!-- Search bar -->
+        <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Cari subjek atau tajuk (Cth: Sejarah, Pendidikan Islam, Tahun 4, Tahun 5)..." onkeyup="filterQuizzes()">
 
-        <!-- KOTAK MUAT NAIK PDF -->
+        <!-- Kotak Upload PDF -->
         <div class="upload-section" id="uploadSection">
             <h3>Jana Kuiz & Visual PDF 📄✨</h3>
             <p class="upload-desc">Muat naik mana-mana kertas soalan PDF. Sistem akan memaparkan helaian asal di sebelah borang soalan interaktif!</p>
-            <input type="file" id="pdfUpload" accept="application/pdf" style="margin: 15px 0; font-family: 'Nunito';">
+            <input type="file" id="pdfUpload" accept="application/pdf" style="margin: 12px 0; font-family: 'Nunito';">
             <br>
             <button class="btn" onclick="processPDF()">Jana Skrin Terbahagi (Split Screen) 🚀</button>
             <div id="loading" class="loading">⏳ Membaca PDF & Menjana Kuiz... Sila tunggu</div>
         </div>
 
-        <!-- WORKSPACE (SPLIT SCREEN) -->
+        <!-- Split Screen Workspace -->
         <div class="workspace" id="workspace">
             <div class="pdf-panel" id="pdfViewer">
                 <h3>Kertas Soalan Asal (Rujukan)</h3>
             </div>
-            
-            <div class="quiz-panel" id="ai-result">
-            </div>
+            <div class="quiz-panel" id="ai-result"></div>
         </div>
 
-        <!-- SENARAI KUIZ LENGKAP SEDIA ADA -->
+        <!-- Senarai Kuiz Sedia Ada -->
         <div class="section-heading" id="senaraiTajuk">
             <span>📚 Senarai Kertas Ujian Sedia Ada</span>
         </div>
 
         <div class="quiz-grid" id="quizList">
-            <!-- Kad 1: Sejarah Tahun 4 -->
-            <a href="sejarah-tahun4.html" class="quiz-card" data-subject="Sejarah Tahun 4 UASA">
+            <!-- 1. Sejarah Tahun 4 -->
+            <a href="sejarah-tahun4.html" class="quiz-card card-sejarah" data-subject="Sejarah Tahun 4 UASA">
                 <div>
                     <span class="badge badge-sejarah">Tahun 4</span>
                     <h3 class="card-title">Sejarah (UASA)</h3>
-                    <p class="card-desc">Ujian Akhir Sesi Akademik — 20 soalan objektif, bahagian struktur & subjektif berserta kesan audio.</p>
+                    <p class="card-desc">Ujian Akhir Sesi Akademik — 20 soalan objektif, bahagian struktur & subjektif lengkap berserta semakan markah automatik.</p>
                 </div>
                 <div class="card-action">Mula Jawab Soalan ➡</div>
             </a>
 
-            <!-- Kad 2: Pendidikan Islam Tahun 5 -->
-            <a href="pendidikan-islam-tahun5.html" class="quiz-card card-islam" data-subject="Pendidikan Islam Tahun 5 Akhir Tahun Jawi Tajwid">
+            <!-- 2. Pendidikan Islam Tahun 4 -->
+            <a href="pendidikan-islam-tahun4.html" class="quiz-card card-pi4" data-subject="Pendidikan Islam Tahun 4 Akhir Tahun Jawi Tajwid Hafazan Hadith">
                 <div>
-                    <span class="badge badge-islam">Tahun 5</span>
-                    <h3 class="card-title">ڤنديديقن إسلام</h3>
-                    <p class="card-desc">Pentaksiran Akhir Tahun — Surah At-Tin, Surah Al-'Asr, Tajwid, Akidah Sihir (Format Jawi & Rumi Lengkap).</p>
+                    <span class="badge badge-pi4">Tahun 4</span>
+                    <h3 class="card-title">ڤنديديقن إسلام (تاهون 4)</h3>
+                    <p class="card-desc">Peperiksaan Akhir Tahun — Surah Al-Qariah, Ikhfa' Syafawi & Idgham Mislain, Al-Ikhlas, Hadith Tetamu, Adab, Akidah Kufur, Sirah & Jawi.</p>
+                </div>
+                <div class="card-action">Mula Jawab Soalan ➡</div>
+            </a>
+
+            <!-- 3. Pendidikan Islam Tahun 5 -->
+            <a href="pendidikan-islam-tahun5.html" class="quiz-card card-pi5" data-subject="Pendidikan Islam Tahun 5 Akhir Tahun Jawi Tajwid">
+                <div>
+                    <span class="badge badge-pi5">Tahun 5</span>
+                    <h3 class="card-title">ڤنديديقن إسلام (تاهون 5)</h3>
+                    <p class="card-desc">Pentaksiran Akhir Tahun — Surah At-Tin, Surah Al-'Asr, Tajwid, Akidah Sihir, dan Kepimpinan Nabi (Semakan Markah Automatik).</p>
                 </div>
                 <div class="card-action">Mula Jawab Soalan ➡</div>
             </a>
         </div>
     </div>
 
-    <!-- MODAL TETAPAN API & PILIHAN MODEL -->
+    <!-- Modal Tetapan API -->
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <h2 style="color: var(--primary); margin-top:0; font-size:1.6em;">⚙️ Tetapan API & Model</h2>
@@ -448,14 +362,12 @@
                 </ol>
             </div>
 
-            <!-- INPUT KUNCI API -->
-            <label style="display:block; text-align:left; font-weight:bold; font-size:0.95em; margin-bottom:4px; border:none; padding:0; background:none;">Kunci API Gemini:</label>
-            <input type="password" id="apiKeyInput" style="width: 100%; padding: 11px; margin-bottom: 15px; border: 2px solid #cbd5e1; border-radius: 8px; font-family:'Nunito'; box-sizing:border-box;" placeholder="Tampal API Key anda di sini...">
+            <label style="display:block; text-align:left; font-weight:bold; font-size:0.95em; margin-bottom:4px;">Kunci API Gemini:</label>
+            <input type="password" id="apiKeyInput" style="width: 100%; padding: 11px; margin-bottom: 15px; border: 2px solid #cbd5e1; border-radius: 8px; font-family:'Nunito'; box-sizing:border-box;" placeholder="Tampal API Key di sini...">
 
-            <!-- PILIHAN MODEL (DROPDOWN BARU) -->
-            <label style="display:block; text-align:left; font-weight:bold; font-size:0.95em; margin-bottom:4px; border:none; padding:0; background:none;">Pilih Model AI:</label>
+            <label style="display:block; text-align:left; font-weight:bold; font-size:0.95em; margin-bottom:4px;">Pilih Model AI:</label>
             <select id="modelSelect" style="width: 100%; padding: 11px; margin-bottom: 20px; border: 2px solid #cbd5e1; border-radius: 8px; font-family:'Nunito'; font-weight:bold; box-sizing:border-box; outline:none;">
-                <option value="gemini-3.8-flash">gemini-3.8-flash (Disyorkan Rasmi oleh Google)</option>
+                <option value="gemini-3.8-flash">gemini-3.8-flash (Disyorkan Rasmi)</option>
                 <option value="gemini-2.5-flash">gemini-2.5-flash</option>
                 <option value="gemini-1.5-flash">gemini-1.5-flash</option>
                 <option value="gemini-pro">gemini-pro</option>
@@ -466,84 +378,9 @@
         </div>
     </div>
 
-    <!-- MODAL TAHNIAH -->
-    <div id="successModal" class="modal">
-        <div class="modal-content" style="text-align:center;">
-            <h2 style="color: var(--primary); font-size: 2.2em; margin-top:0;">TAHNIAH! 🌟</h2>
-            <p style="font-size: 1.15em; color: #475569; font-weight: bold;">Kamu telah berjaya melengkapkan kuiz ini.</p>
-            <button class="btn" style="width: 100%; font-size: 1.1em;" onclick="document.getElementById('successModal').style.display='none'">Tutup & Semak Markah</button>
-        </div>
-    </div>
-
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-        // --- SISTEM AUDIO (Web Audio API) ---
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx;
-        function initAudio() { if (!audioCtx) audioCtx = new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
-
-        function playPopSound() {
-            initAudio();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine'; osc.frequency.setValueAtTime(400, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.1);
-            gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-        }
-
-        let typingTimer;
-        function playTypingSound() {
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(() => {
-                initAudio();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'triangle'; osc.frequency.setValueAtTime(300, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
-                osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.05);
-            }, 50);
-        }
-
-        function submitQuiz() {
-            initAudio();
-            const notes = [440, 554, 659, 880];
-            let startTime = audioCtx.currentTime;
-            notes.forEach((freq, i) => {
-                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-                osc.type = 'square'; osc.frequency.value = freq;
-                gain.gain.setValueAtTime(0.1, startTime + (i * 0.1)); gain.gain.setTargetAtTime(0, startTime + (i * 0.1) + 0.1, 0.1);
-                osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.start(startTime + (i * 0.1)); osc.stop(startTime + (i * 0.1) + 0.5);
-            });
-            var end = Date.now() + 3000;
-            (function frame() {
-                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff6b6b', '#4ecdc4', '#ffe66d'] });
-                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff6b6b', '#4ecdc4', '#ffe66d'] });
-                if (Date.now() < end) requestAnimationFrame(frame);
-            }());
-            setTimeout(() => document.getElementById('successModal').style.display = 'flex', 1000);
-        }
-
-        function tutupKuiz() {
-            document.getElementById('workspace').style.display = 'none';
-            document.getElementById('ai-result').innerHTML = '';
-            document.getElementById('pdfViewer').innerHTML = '<h3>Kertas Soalan Asal (Rujukan)</h3>';
-            
-            document.getElementById('uploadSection').style.display = 'block';
-            document.getElementById('quizList').style.display = 'grid';
-            document.getElementById('senaraiTajuk').style.display = 'flex';
-            document.getElementById('searchInput').style.display = 'block';
-            document.getElementById('pdfUpload').value = '';
-        }
-
-        window.playPopSound = playPopSound;
-        window.playTypingSound = playTypingSound;
-        window.tutupKuiz = tutupKuiz;
-
-        // --- SISTEM PORTAL & TETAPAN ---
         window.onload = function() {
             if(localStorage.getItem('geminiApiKey')) {
                 document.getElementById('apiKeyInput').value = localStorage.getItem('geminiApiKey');
@@ -562,14 +399,13 @@
         function saveSettings() {
             const key = document.getElementById('apiKeyInput').value.trim();
             const model = document.getElementById('modelSelect').value;
-            
             if(key === "") {
                 alert("Sila masukkan API Key terlebih dahulu.");
                 return;
             }
             localStorage.setItem('geminiApiKey', key);
             localStorage.setItem('geminiSelectedModel', model);
-            alert(`Tetapan berjaya disimpan!
+            alert(`Tetapan disimpan!
 Model: ${model}`);
             document.getElementById('settingsModal').style.display = 'none';
         }
@@ -582,10 +418,21 @@ Model: ${model}`);
             }
         }
 
+        function tutupKuiz() {
+            document.getElementById('workspace').style.display = 'none';
+            document.getElementById('ai-result').innerHTML = '';
+            document.getElementById('pdfViewer').innerHTML = '<h3>Kertas Soalan Asal (Rujukan)</h3>';
+            document.getElementById('uploadSection').style.display = 'block';
+            document.getElementById('quizList').style.display = 'grid';
+            document.getElementById('senaraiTajuk').style.display = 'flex';
+            document.getElementById('searchInput').style.display = 'block';
+            document.getElementById('pdfUpload').value = '';
+        }
+        window.tutupKuiz = tutupKuiz;
+
         async function processPDF() {
             const fileInput = document.getElementById('pdfUpload');
             const apiKey = localStorage.getItem('geminiApiKey');
-            
             if (!apiKey) {
                 alert("Sila masukkan API Key Gemini di menu '⚙️ Tetapan API & Model' terlebih dahulu.");
                 bukaTetapan();
@@ -626,33 +473,24 @@ Model: ${model}`);
                         await page.render(renderContext).promise;
                         pdfViewer.appendChild(canvas);
                     }
-                    
                     generateQuizWithGemini(fullText, apiKey);
                 };
                 fileReader.readAsArrayBuffer(fileInput.files[0]);
             } catch (error) {
-                alert("Ralat membaca PDF. Pastikan ia fail PDF yang sah.");
+                alert("Ralat membaca PDF.");
                 document.getElementById('loading').style.display = 'none';
                 tutupKuiz();
             }
         }
 
         async function generateQuizWithGemini(text, apiKey) {
-            const prompt = `Anda adalah sistem pengekstrakan kuiz. Berikut teks fail peperiksaan:
-            
+            const prompt = `Anda adalah sistem pengekstrakan kuiz. Hasilkan borang HTML yang mengandungi KESELURUHAN soalan daripada teks ini:
             ${text}
-            
-            Tugasan anda: Hasilkan borang HTML yang mengandungi KESELURUHAN soalan. 
-            SYARAT WAJIB (Jadikan ia Interaktif):
+            Format:
             1. Balut setiap soalan di dalam <div class="question">.
-            2. PENTING (GAMBAR/JAWI): Jika anda merasakan soalan tersebut mempunyai gambarajah, graf, peta, jadual, atau ada teks yang anda tidak faham, masukkan ayat ini dengan gaya bold merah: <span class="rujukan-nota">*(Sila rujuk imej rajah/jawi pada kertas asal di paparan sebelah)*</span> betul-betul di bawah teks soalan.
-            3. Untuk SETIAP pilihan soalan objektif (A, B, C, D), wajib gunakan format:
-               <label><input type="radio" name="soalanX" value="A" onclick="window.playPopSound()"> Pilihan A</label>
-            4. Untuk soalan subjektif/struktur, wajib gunakan format:
-               <input type="text" oninput="window.playTypingSound()"> ATAU <textarea oninput="window.playTypingSound()"></textarea>
-            5. Hanya kembalikan elemen di dalam teg <form id="aiForm"> sahaja, tanpa tag <html> atau markdown backticks.`;
+            2. PENTING (GAMBAR/JAWI): Masukkan <span class="rujukan-nota">*(Sila rujuk imej rajah/jawi pada kertas asal di paparan sebelah)*</span> jika ada gambar atau teks Jawi.
+            3. Hanya kembalikan elemen di dalam teg <form id="aiForm"> sahaja.`;
 
-            // Model yang dipilih oleh pengguna atau fallback ke gemini-3.8-flash
             const selectedModel = localStorage.getItem('geminiSelectedModel') || 'gemini-3.8-flash';
             const modelsToTry = [selectedModel, 'gemini-3.8-flash', 'gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-pro'];
             const uniqueModels = [...new Set(modelsToTry)];
@@ -669,15 +507,12 @@ Model: ${model}`);
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
                     });
-                    
                     data = await response.json();
-                    
                     if (data && !data.error && data.candidates && data.candidates[0].content) {
                         success = true;
                         break;
                     } else if (data && data.error) {
                         lastErrorMessage = data.error.message;
-                        console.warn(`Model ${model} gagal:`, lastErrorMessage);
                     }
                 } catch (e) {
                     lastErrorMessage = "Gagal menyambung ke pelayan Google.";
@@ -685,18 +520,15 @@ Model: ${model}`);
             }
 
             document.getElementById('loading').style.display = 'none';
-
             if (!success) {
-                alert("Ralat API Gemini: " + lastErrorMessage + "\n\nAnda boleh menukar model di menu '⚙️ Tetapan API & Model'.");
+                alert("Ralat API Gemini: " + lastErrorMessage);
                 bukaTetapan();
                 tutupKuiz();
                 return;
             }
 
-            // Paparkan soalan yang dijana
             let aiText = data.candidates[0].content.parts[0].text;
             aiText = aiText.replace(/```html/g, '').replace(/```/g, '');
-            
             document.getElementById('ai-result').innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px;">
                     <h3 style="color:var(--primary); margin:0;">Kuiz Digital Sedia! 🎉</h3>
@@ -704,9 +536,8 @@ Model: ${model}`);
                 </div>
                 <p style="text-align:center; font-size:0.9em; color:#666; margin-bottom:20px;">Jawab semua soalan. Rujuk kertas asal di sebelah jika ada gambarajah atau teks Jawi.</p>
                 ` + aiText + `
-                <button type="button" class="btn" style="width:100%; font-size:20px; padding:20px; border-radius:50px; margin-top:30px; text-transform:uppercase; letter-spacing:2px;" onclick="submitQuiz()">Hantar Jawapan 🚀</button>
+                <button type="button" class="btn" style="width:100%; font-size:20px; padding:20px; border-radius:50px; margin-top:30px; text-transform:uppercase;" onclick="alert('Tahniah! Jawapan anda telah direkodkan.')">Hantar Jawapan 🚀</button>
             `;
-            
             document.getElementById('uploadSection').style.display = 'none'; 
             document.getElementById('workspace').style.display = 'flex'; 
         }
