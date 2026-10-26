@@ -762,7 +762,55 @@
                 pesan.innerText = "Teruskan belajar! Semak jawapan yang betul di bawah.";
             }
 
+            
+                        // --- SIMPAN REKOD MARKAH (LOCAL & CLOUD GOOGLE SHEETS) ---
+            try {
+                const namaMurid = document.getElementById('namaMurid').value.trim() || "Tanpa Nama";
+                const kelasMurid = document.getElementById('kelasMurid').value.trim() || "-";
+                const subjek = document.title.split('-')[0].trim();
+                const tarikh = new Date().toLocaleString('ms-MY', { timeZone: 'Asia/Kuala_Lumpur' });
+                
+                const skorAkhir = document.getElementById('skorBesar').innerText;
+                const teksPeratus = document.getElementById('peratusText').innerText; 
+                const peratusSahaja = teksPeratus.match(/(\d+)%/)[1];
+                
+                const rekodBaru = {
+                    nama: namaMurid,
+                    kelas: kelasMurid,
+                    subjek: subjek,
+                    skor: skorAkhir,
+                    peratus: peratusSahaja,
+                    tarikh: tarikh
+                };
+                
+                let senaraiRekod = JSON.parse(localStorage.getItem('rekod_markah')) || [];
+                senaraiRekod.unshift(rekodBaru);
+                localStorage.setItem('rekod_markah', JSON.stringify(senaraiRekod));
+                
+                // HANTAR TERUS KE GOOGLE SHEETS
+                const defaultDbUrl = "https://script.google.com/macros/s/AKfycbzuM_RGDDMELxZ51wEVAerGjYvbL6jC_6ykZynwi2yuP2nLzlLmszAMtIzMFItB0BO9mw/exec";
+                const dbUrl = localStorage.getItem('googleSheetUrl') || defaultDbUrl;
+                if (dbUrl) {
+                    const urlParams = new URLSearchParams({
+                        action: 'save',
+                        tarikh: tarikh,
+                        nama: namaMurid,
+                        kelas: kelasMurid,
+                        subjek: subjek,
+                        skor: skorAkhir,
+                        peratus: peratusSahaja
+                    });
+                    fetch(dbUrl + '?' + urlParams.toString(), { method: 'GET', mode: 'no-cors' })
+                        .then(() => console.log('Tersimpan di Google Sheets'))
+                        .catch(e => console.error("Gagal hantar ke Google Sheets:", e));
+                }
+            } catch (e) {
+                console.error("Gagal menyimpan rekod:", e);
+            }
+            // ----------------------------------------------------------
+            
             playVictorySound();
+
             document.getElementById('resultModal').style.display = 'flex';
         }
 
