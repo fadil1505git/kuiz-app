@@ -3,119 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kuiz Sejarah Tahun 4 - UASA (Penuh)</title>
+    <title>Portal Kuiz Pintar - Visual & Interaktif</title>
+    <!-- Muat turun PDF.js untuk baca PDF dan render imej -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f8ff; color: #333; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #0056b3; }
-        h2 { border-bottom: 2px solid #0056b3; padding-bottom: 5px; color: #0056b3; margin-top: 30px; }
-        .info-section { display: flex; gap: 20px; margin-bottom: 20px; }
-        .info-section input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
-        .question { margin-bottom: 20px; padding: 15px; background-color: #f9f9f9; border-left: 4px solid #0056b3; border-radius: 4px; }
-        .question p { margin-top: 0; font-weight: bold; }
-        .options label { display: block; margin-bottom: 8px; cursor: pointer; }
-        input[type="text"], textarea, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        button { display: block; width: 100%; padding: 15px; background: #0056b3; color: white; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 30px; }
-        button:hover { background: #004494; }
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+        
+        :root { --primary: #ff6b6b; --bg: #f0f8ff; --card: #ffffff; --text: #2b2d42; --accent: #4ecdc4; }
+        body { font-family: 'Nunito', system-ui, sans-serif; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: var(--text); margin: 0; padding: 0; min-height: 100vh; }
+        
+        /* Header */
+        .header { background: rgba(255,255,255,0.95); color: var(--primary); padding: 15px 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-bottom: 4px solid var(--accent); position: relative; z-index: 10;}
+        .header h1 { margin: 0; font-weight: 900; font-size: 2em; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .btn-settings { position: absolute; right: 20px; top: 15px; background: var(--accent); color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: transform 0.2s; }
+        .btn-settings:hover { transform: scale(1.05); }
+        
+        /* Main Container */
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+        
+        .upload-section { background: rgba(255,255,255,0.95); padding: 25px; border-radius: 15px; text-align: center; border: 3px dashed var(--accent); margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .upload-section h3 { color: var(--accent); margin-top: 0; font-size: 1.5em;}
+        
+        .btn { background: linear-gradient(45deg, #ff6b6b, #ff8e8b); color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 15px; transition: transform 0.2s; box-shadow: 0 4px 10px rgba(255,107,107,0.3); }
+        .btn:hover { transform: scale(1.05); }
+        
+        .loading { display: none; text-align: center; padding: 20px; color: var(--primary); font-weight: bold; font-size: 1.2em; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+
+        /* Workspace (Split Screen Layout) */
+        .workspace { display: flex; flex-direction: column; gap: 20px; display: none; margin-bottom: 40px; }
+        @media (min-width: 800px) { .workspace { flex-direction: row; align-items: flex-start; } }
+        
+        /* PDF Viewer Left Side */
+        .pdf-panel { flex: 1; background: #333; border-radius: 15px; padding: 15px; max-height: 85vh; overflow-y: auto; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); text-align: center;}
+        .pdf-panel h3 { color: white; margin-top: 0; border-bottom: 2px solid #555; padding-bottom: 10px;}
+        .pdf-page-canvas { max-width: 100%; height: auto; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); background: white;}
+        
+        /* AI Quiz Right Side */
+        .quiz-panel { flex: 1; background: rgba(255,255,255,0.95); padding: 30px; border-radius: 15px; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 6px solid var(--primary);}
+        
+        /* AI Generated Form Styles */
+        #aiForm h3 { color: var(--accent); border-bottom: 3px dashed var(--accent); padding-bottom: 10px; font-size: 1.5em; margin-top: 0; }
+        .question { margin-bottom: 25px; padding: 20px; background: #ffffff; border-radius: 12px; border-left: 6px solid var(--accent); box-shadow: 0 4px 6px rgba(0,0,0,0.03); }
+        .question p { font-weight: bold; font-size: 1.1em; color: var(--text); margin-top: 0; }
+        .rujukan-nota { color: #ff6b6b; font-size: 0.9em; font-style: italic; display: block; margin-top: 5px; }
+        label { display: block; margin-bottom: 10px; cursor: pointer; padding: 12px 15px; background: #f8f9fa; border-radius: 8px; transition: background 0.2s, border 0.2s; border: 2px solid transparent; }
+        label:hover { background: #e9ecef; border-color: var(--accent); }
+        input[type="radio"] { transform: scale(1.3); margin-right: 12px; accent-color: var(--accent); }
+        input[type="text"], textarea { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-family: 'Nunito', sans-serif; margin-top: 8px; box-sizing: border-box; transition: border 0.3s; }
+        input[type="text"]:focus, textarea:focus { outline: none; border-color: var(--accent); }
+        
+        /* Modals */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: white; padding: 40px; border-radius: 20px; max-width: 450px; width: 90%; text-align: center; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        
+        /* Custom Scrollbar for panels */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Ujian Akhir Sesi Akademik<br>Sejarah (Tahun 4) - Set Lengkap</h1>
-        <div class="info-section">
-            <input type="text" placeholder="Nama Murid" required>
-            <input type="text" placeholder="Kelas" required>
+    <div class="header">
+        <h1>🎮 Portal Pembelajaran Pintar</h1>
+        <button class="btn-settings" onclick="document.getElementById('settingsModal').style.display='flex'">⚙️ Tetapan API</button>
+    </div>
+
+    <div class="container" id="mainContainer">
+        <div class="upload-section" id="uploadSection">
+            <h3>Jana Kuiz & Visual PDF 📄✨</h3>
+            <p style="color: #666; font-weight: bold;">Upload kertas soalan. Imej, Jawi & graf akan dipaparkan bersebelahan dengan kuiz!</p>
+            <input type="file" id="pdfUpload" accept="application/pdf" style="margin: 15px 0; font-family: 'Nunito';">
+            <br>
+            <button class="btn" onclick="processPDF()">Jana Skrin Terbahagi (Split Screen) 🚀</button>
+            <div id="loading" class="loading">⏳ Membaca PDF & Membina Kuiz Interaktif... Sila tunggu...</div>
         </div>
 
-        <form>
-            <h2>Bahagian A (20 Markah)</h2>
-            <script>
-                const soalanA = [
-                    "1. Antara berikut, manakah merupakan identiti sesebuah sekolah?|A. bendera|B. bangunan|C. jumlah guru|D. uniform sekolah",
-                    "2. Maklumat berikut berkaitan dengan kaedah penyelidikan sejarah. Kaedah Bertulis - Penelitian tentang penulisan catatan asal sesebuah kejadian sejarah. Dimanakah pengkaji sejarah boleh mendapatkan bahan sejarah tersebut?|A. Arkib|B. Makmal|C. Stadium|D. Sekolah",
-                    "3. Apakah yang akan berlaku jika kawasan tempat tinggal kotor dan dipenuhi sampah-sarap?|A. Penyebaran pelbagai penyakit|B. Menjejaskan keharmonian kaum|C. Menyebabkan kesesakan jalan raya|D. Menggalakkan kegiatan aktiviti pelancongan",
-                    "4. Dalam satu projek sejarah, kamu ditugaskan untuk menemubual seorang tokoh sukan. Apakah kaedah yang akan digunakan?|A. Lisan|B. Kajian|C. Arkeologi|D. Pandang dengar",
-                    "5. Maklumat berikut berkaitan dengan bentuk muka bumi X: Dijadikan kawasan jeti nelayan dan tempat tumpuan pelancong. Apakah bentuk muka bumi X?|A. Pesisir pantai|B. Pinggir sungai|C. Tanah pamah|D. Tanah tinggi",
-                    "6. Siapakah teraju utama sesebuah sekolah?|A. Guru besar|B. Guru-guru lelaki|C. Penolong Kanan Pentadbiran|D. Penolong Kanan Kokurikulum",
-                    "7. Mengapakah berlaku kepupusan haiwan pada Zaman Air Batu Akhir?|A. Perubahan suhu|B. Pembentukan sungai|C. Penghijrahan tempat|D. Petempatan baharu",
-                    "8. Gambar menunjukkan haiwan berupa harimau dengan gigi panjang melengkung pada Zaman Air Batu Akhir. Apakah haiwan tersebut?|A. Sloth|B. Mamot|C. Megaloceros|D. Harimau bertaring lengkung",
-                    "9. Bagaimanakah masyarakat zaman Neolitik menjalankan aktiviti perdagangan?|A. hutang|B. jual beli|C. pinjaman|D. tukar barang",
-                    "10. Zaman prasejarah manakah yang menggunakan peralatan daripada gangsa dan besi?|A. Mesolitik|B. Logam|C. Neolitik|D. Paleolitik",
-                    "11. Apakah nama Kerajaan Melayu Awal yang mengeluarkan hasil hutan dan hasil laut ?|A. Kerajaan Funan|B. Kerajaan Champa|C. Kerajaan Srivijaya|D. Kerajaan Santubong",
-                    "12. Lokasi Kerajaan Majapahit berpusat di Trowulan, Mojokerto. Di manakah letaknya kerajaan ini?|A. Sumatera|B. Majapahit|C. Kalimantan|D. Jawa Timur",
-                    "13. Mengapakah Parameswara mendapati Temasik sesuai dijadikan kerajaan?|A. Penduduknya yang setia|B. Kaya dengan sumber alam|C. Kedudukannya yang strategik|D. Terletak di kawasan pedalamam",
-                    "14. Apakah jawatan yang mengetuai angkatan tentera laut ?|A. Penghulu|B. Bendahara|C. Laksamana|D. Temenggung",
-                    "15. Apakah sumbangan Tun Perak dalam pengembangan agama Islam di Melaka ?|A. Membina sekolah agama|B. Menggalakkan kedatangan ulama|C. Melantik ulama sebagai pembesar|D. Memerintah kerajaan mengikut ajaran Islam",
-                    "16. X mengetuai angkatan laut Melaka dalam melakukan serangan. Siapakah X?|A. Sultan|B. Bendahara|C. Laksamana|D. Temenggung",
-                    "17. Apakah hubungan Tun Perpatih Serdang dengan Tun Perak?|A. Bapa|B. Datuk|C. Bapa saudara|D. Adik beradik",
-                    "18. Berdasarkan Sulalatus Salatin, siapakah pengasas Kesultanan Melayu Melaka?|A. Sultan Mansur Shah|B. Sultan Mahmud Shah|C. Sultan Iskandar Shah|D. Sultan Muzaffar Shah",
-                    "19. Berapakah bilangan sahabat karib Laksamana Hang Tuah?|A. Dua|B. Tiga|C. Empat|D. Lima",
-                    "20. Apakah peranan Hang Tuah pada zaman Kesultanan Melayu Melaka?|A. Ketua diplomat|B. Ketua pembesar|C. Penasihat sultan|D. Pengawal sultan"
-                ];
-                soalanA.forEach((item, index) => {
-                    let parts = item.split('|');
-                    document.write(`<div class="question"><p>${parts[0]}</p><div class="options">`);
-                    for(let i=1; i<=4; i++){
-                        document.write(`<label><input type="radio" name="q${index+1}" value="${parts[i][0]}"> ${parts[i]}</label>`);
-                    }
-                    document.write(`</div></div>`);
-                });
-            </script>
-
-            <h2>Bahagian B (20 Markah)</h2>
-            <div class="question">
-                <p>1. Tandakan jawapan yang betul (Betul/Salah) berkenaan sejarah sekolah.</p>
-                <p>(a) Peristiwa perasmian bangunan baru sekolah juga termasuk dalam sejarah sekolah. <select><option>Pilih</option><option>Betul</option><option>Salah</option></select></p>
-                <p>(b) Hari sukan tahunan merupakan peristiwa penting yang perlu dicatatkan dalam sejarah sekolah. <select><option>Pilih</option><option>Betul</option><option>Salah</option></select></p>
-                <p>(c) Murid yang berbangga dengan sekolahnya akan sentiasa menjaga nama baik sekolah. <select><option>Pilih</option><option>Betul</option><option>Salah</option></select></p>
-                <p>(d) Murid yang hendak menukar keahlian dalam unit beruniform perlu berjumpa dengan Guru Penolong Kanan Pentadbiran. <select><option>Pilih</option><option>Betul</option><option>Salah</option></select></p>
-                <p>(e) Guru Penolong Kanan Hal Ehwal Murid berperanan menguruskan program akademik di sekolah. <select><option>Pilih</option><option>Betul</option><option>Salah</option></select></p>
-            </div>
-
-            <div class="question">
-                <p>2. Lengkapkan berkaitan kehidupan manusia pada Zaman Paleolitik (Pilihan: hutan, nomad, gua, batu, api, logam)</p>
-                <p>(a) Hidup secara: <input type="text"></p>
-                <p>(b) Tinggal di dalam: <input type="text"></p>
-                <p>(c) Mahir menggunakan: <input type="text"> untuk menghalau haiwan buas</p>
-                <p>(d) Peralatan daripada: <input type="text"></p>
-                <p>(e) Mengutip hasil: <input type="text"></p>
+        <div class="workspace" id="workspace">
+            <div class="pdf-panel" id="pdfViewer">
+                <h3>Kertas Soalan Asal (Rujukan)</h3>
+                <!-- PDF Canvases will be injected here -->
             </div>
             
-            <div class="question">
-                <p>3. Padankan Kegiatan Ekonomi (Perlombongan, Hasil hutan & laut, Pertanian, Pembuatan, Pelabuhan perdagangan)</p>
-                <p>(a) Padi, pisang, buah pala dan ubi kayu: <input type="text"></p>
-                <p>(b) Rempah ratus seperti lada hitam dan cengkih: <input type="text"></p>
-                <p>(c) Rotan, kapur barus, mutiara dan teripang: <input type="text"></p>
-                <p>(d) Bijih timah, bijih besi dan emas: <input type="text"></p>
-                <p>(e) Barang perhiasan, tembikar dan senjata: <input type="text"></p>
+            <div class="quiz-panel" id="ai-result">
+                <!-- AI Generated Form will be injected here -->
             </div>
-            
-            <div class="question">
-                <p>4. Isi tempat kosong (Pilihan: Muar, Temasik, Majapahit, Siam, Melaka, Palembang)</p>
-                <p>(a) Parameswara ialah putera raja kerajaan Melayu dari kerajaan <input type="text" style="width:200px; display:inline;"></p>
-                <p>(b) Kerajaan <input type="text" style="width:200px; display:inline;"> menyerang Palembang kerana Parameswara ingin membebaskan kerajaannya.</p>
-                <p>(c) Semasa melarikan diri, Parameswara dan pengikut menaiki kapal menuju ke <input type="text" style="width:200px; display:inline;"></p>
-                <p>(d) Pembunuhan Tamagi di Temasik telah menyebabkan kerajaan <input type="text" style="width:200px; display:inline;"> ingin menuntut bela.</p>
-                <p>(e) Peristiwa anjing dan pelanduk telah memberi idea kepada Parameswara untuk membuka kerajaan <input type="text" style="width:200px; display:inline;"></p>
-            </div>
-
-            <h2>Bahagian C (10 Markah)</h2>
-            <div class="question">
-                <p>1 (a) Berikan dua jenis barang dagangan yang dipasarkan oleh kerajaan Melayu awal kepada kerajaan China dan India. (2 markah)</p>
-                <textarea rows="2"></textarea>
-                <p>1 (b) Nyatakan tiga kebaikan kerajaan Melayu awal menjalinkan hubungan diplomatik dengan kuasa luar. (3 markah)</p>
-                <textarea rows="3"></textarea>
-            </div>
-            
-            <div class="question">
-                <p>2 (a) Berikan dua jawatan yang pernah dipegang oleh Tun Perak? (2 markah)</p>
-                <textarea rows="2"></textarea>
-                <p>2 (b) Tuliskan tiga kebaikan sikap taat setia Tun Perak kepada sultan Melaka. (3 markah)</p>
-                <textarea rows="3"></textarea>
-            </div>
-
-            <button type="button" onclick="alert('Tahniah! Anda telah melengkapkan Set Kertas Sejarah Tahun 4. Sila tunjukkan jawapan anda kepada guru/ibubapa.')">Hantar Jawapan Keseluruhan</button>
-        </form>
+        </div>
     </div>
+
+    <!-- Modal Tetapan API -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: var(--primary); margin-top:0;">Tetapan API Gemini</h2>
+            <p style="color: #666;">Untuk menggunakan ciri AI, masukkan kunci API Gemini anda di bawah.</p>
+            <input type="password" id="apiKeyInput" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 2px solid #e2e8f0; border-radius: 8px; font-family:'Nunito'; box-sizing:border-box;" placeholder="Paste API Key di sini...">
+            <button class="btn" style="width: 100%;" onclick="saveApiKey()">Simpan Kunci API</button>
+            <button class="btn" style="width: 100%; background: #9ca3af; box-shadow: none;" onclick="document.getElementById('settingsModal').style.display='none'">Batal</button>
+        </div>
+    </div>
+
+    <!-- Modal Tahniah -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: var(--primary); font-size: 2.5em; margin-top:0;">TAHNIAH! 🌟</h2>
+            <p style="font-size: 1.2em; color: #666; font-weight: bold;">Kamu telah berjaya melengkapkan kuiz ini.</p>
+            <button class="btn" style="width: 100%; font-size: 1.2em;" onclick="document.getElementById('successModal').style.display='none'">Tutup & Semak Markah</button>
+        </div>
+    </div>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+        // --- SISTEM AUDIO (Web Audio API) ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+        function initAudio() { if (!audioCtx) audioCtx = new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
+
+        function playPopSound() {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(400, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+        }
+
+        let typingTimer;
+        function playTypingSound() {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(300, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+            }, 50);
+        }
+
+        function submitQuiz() {
+            initAudio();
+            const notes = [440, 554, 659, 880];
+            let startTime = audioCtx.currentTime;
+            notes.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                osc.type = 'square'; osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.1, startTime + (i * 0.1)); gain.gain.setTargetAtTime(0, startTime + (i * 0.1) + 0.1, 0.1);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(startTime + (i * 0.1)); osc.stop(startTime + (i * 0.1) + 0.5);
+            });
+            var end = Date.now() + 3000;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff6b6b', '#4ecdc4', '#ffe66d'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff6b6b', '#4ecdc4', '#ffe66d'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+            setTimeout(() => document.getElementById('successModal').style.display = 'flex', 1000);
+        }
+        window.playPopSound = playPopSound;
+        window.playTypingSound = playTypingSound;
+
+        // --- SISTEM PORTAL ---
+        window.onload = function() {
+            if(localStorage.getItem('geminiApiKey')) {
+                document.getElementById('apiKeyInput').value = localStorage.getItem('geminiApiKey');
+            }
+        };
+
+        function saveApiKey() {
+            localStorage.setItem('geminiApiKey', document.getElementById('apiKeyInput').value);
+            alert('API Key berjaya disimpan!');
+            document.getElementById('settingsModal').style.display='none';
+        }
+
+        async function processPDF() {
+            const fileInput = document.getElementById('pdfUpload');
+            const apiKey = localStorage.getItem('geminiApiKey');
+            
+            if (!apiKey) {
+                alert("Sila masukkan API Key Gemini di menu 'Tetapan API'.");
+                document.getElementById('settingsModal').style.display='flex';
+                return;
+            }
+            if (!fileInput.files[0]) { alert("Sila pilih fail PDF terlebih dahulu."); return; }
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('workspace').style.display = 'none';
+            const pdfViewer = document.getElementById('pdfViewer');
+            pdfViewer.innerHTML = '<h3>Kertas Soalan Asal (Rujukan Visual)</h3>'; // reset viewer
+            
+            try {
+                const fileReader = new FileReader();
+                fileReader.onload = async function() {
+                    const typedarray = new Uint8Array(this.result);
+                    const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                    let fullText = "";
+                    
+                    // Loop for rendering images AND extracting text
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        
+                        // 1. Extract Text
+                        const textContent = await page.getTextContent();
+                        fullText += textContent.items.map(item => item.str).join(' ') + " ";
+                        
+                        // 2. Render Canvas for Visuals
+                        const viewport = page.getViewport({scale: 1.5});
+                        const canvas = document.createElement('canvas');
+                        canvas.className = 'pdf-page-canvas';
+                        const context = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+                        
+                        const renderContext = { canvasContext: context, viewport: viewport };
+                        await page.render(renderContext).promise;
+                        pdfViewer.appendChild(canvas);
+                    }
+                    generateQuizWithGemini(fullText, apiKey);
+                };
+                fileReader.readAsArrayBuffer(fileInput.files[0]);
+            } catch (error) {
+                alert("Ralat membaca PDF. Pastikan ia fail PDF yang sah.");
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        async function generateQuizWithGemini(text, apiKey) {
+            // PROMPT DIKEMASKINI: Arahkan AI untuk letak rujukan imej/Jawi
+            const prompt = `Anda adalah sistem pengekstrakan kuiz. Berikut teks fail peperiksaan:
+            
+            ${text}
+            
+            Tugasan anda: Hasilkan borang HTML yang mengandungi KESELURUHAN soalan. 
+            SYARAT WAJIB (Jadikan ia Interaktif):
+            1. Balut setiap soalan di dalam <div class="question">.
+            2. PENTING (GAMBAR/JAWI): Jika anda merasakan soalan tersebut mempunyai gambarajah, graf, peta, jadual, atau ada teks yang anda tidak faham (seperti tulisan jawi), masukkan ayat ini dengan gaya bold merah: <span class="rujukan-nota">*(Sila rujuk imej rajah/jawi pada kertas asal di paparan sebelah)*</span> betul-betul di bawah teks soalan.
+            3. Untuk SETIAP pilihan soalan objektif (A, B, C, D), wajib gunakan format:
+               <label><input type="radio" name="soalanX" value="A" onclick="window.playPopSound()"> Pilihan A</label>
+            4. Untuk soalan subjektif/struktur, wajib gunakan format:
+               <input type="text" oninput="window.playTypingSound()"> ATAU <textarea oninput="window.playTypingSound()"></textarea>
+            5. Hanya kembalikan elemen di dalam teg <form id="aiForm"> sahaja, tanpa tag <html> atau markdown backticks.`;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+                
+                const data = await response.json();
+                document.getElementById('loading').style.display = 'none';
+                
+                if (data.candidates && data.candidates[0].content) {
+                    let aiText = data.candidates[0].content.parts[0].text;
+                    aiText = aiText.replace(/```html/g, '').replace(/```/g, '');
+                    
+                    document.getElementById('ai-result').innerHTML = `
+                        <h3 style="color:var(--primary); text-align:center;">Kuiz Digital Anda Sedia! 🎉</h3>
+                        <p style="text-align:center; font-size:0.9em; color:#666;">Jawab semua soalan. Rujuk kertas asal di sebelah jika ada gambarajah.</p>
+                        ` + aiText + `
+                        <button type="button" class="btn" style="width:100%; font-size:20px; padding:20px; border-radius:50px; margin-top:30px; text-transform:uppercase; letter-spacing:2px;" onclick="submitQuiz()">Hantar Jawapan 🚀</button>
+                    `;
+                    
+                    document.getElementById('uploadSection').style.display = 'none'; // sembunyikan kotak upload
+                    document.getElementById('workspace').style.display = 'flex'; // paparkan split screen
+                    
+                } else {
+                    alert("Gagal menjana soalan dari Gemini API.");
+                }
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                alert("Ralat semasa menyambung ke API Gemini.");
+            }
+        }
+    </script>
 </body>
 </html>

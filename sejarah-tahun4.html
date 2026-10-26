@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuiz Sejarah Tahun 4 - Interaktif</title>
+    <!-- Memuatkan pustaka Confetti untuk animasi -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+        
+        body { 
+            font-family: 'Nunito', sans-serif; 
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); 
+            color: #333; 
+            padding: 20px; 
+            margin: 0;
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: auto; 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+        }
+        h1 { 
+            text-align: center; 
+            color: #ff6b6b; 
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #4a4e69;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        h2 { 
+            border-bottom: 3px dashed #4ecdc4; 
+            padding-bottom: 10px; 
+            color: #4ecdc4; 
+            margin-top: 40px; 
+            font-size: 1.8em;
+        }
+        .info-section { 
+            display: flex; 
+            gap: 20px; 
+            margin-bottom: 30px; 
+        }
+        .info-section input { 
+            flex: 1; 
+            padding: 15px; 
+            border: 2px solid #ffe66d; 
+            border-radius: 10px; 
+            font-size: 16px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .info-section input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+        }
+        .question { 
+            margin-bottom: 25px; 
+            padding: 25px; 
+            background-color: #ffffff; 
+            border-left: 6px solid #4ecdc4; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .question:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        .question p { 
+            margin-top: 0; 
+            font-weight: 700; 
+            font-size: 1.1em;
+            color: #2b2d42;
+        }
+        .options label { 
+            display: block; 
+            margin-bottom: 12px; 
+            cursor: pointer; 
+            padding: 12px 15px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .options label:hover {
+            background: #e9ecef;
+            border-color: #4ecdc4;
+        }
+        input[type="radio"] {
+            transform: scale(1.3);
+            margin-right: 12px;
+            accent-color: #4ecdc4;
+        }
+        input[type="text"], textarea, select { 
+            width: 100%; 
+            padding: 12px; 
+            margin-top: 8px; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-family: 'Nunito', sans-serif;
+            transition: border 0.3s;
+        }
+        input[type="text"]:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #4ecdc4;
+        }
+        .btn-submit { 
+            display: block; 
+            width: 100%; 
+            padding: 20px; 
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8b); 
+            color: white; 
+            border: none; 
+            border-radius: 50px; 
+            font-size: 22px; 
+            font-weight: 900; 
+            cursor: pointer; 
+            margin-top: 40px; 
+            box-shadow: 0 8px 15px rgba(255, 107, 107, 0.4);
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .btn-submit:hover { 
+            transform: translateY(-3px) scale(1.02); 
+            box-shadow: 0 12px 20px rgba(255, 107, 107, 0.6);
+        }
+        .btn-submit:active {
+            transform: translateY(2px);
+        }
+        
+        /* Modal Style for custom alert */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .modal-box h2 {
+            border: none;
+            color: #ff6b6b;
+            margin-top: 0;
+            font-size: 2em;
+        }
+        .modal-box p {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .modal-btn {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .modal-btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>UASA Sejarah</h1>
+        <div class="subtitle">Tahun 4 Sesi Akademik</div>
+        
+        <div class="info-section">
+            <input type="text" placeholder="🙋 Nama Penuh" required>
+            <input type="text" placeholder="🏫 Kelas" required>
+        </div>
+
+        <form id="quizForm">
+            <h2>✨ Bahagian A: Soalan Objektif</h2>
+            <script>
+                const soalanA = [
+                    "1. Antara berikut, manakah merupakan identiti sesebuah sekolah?|A. bendera|B. bangunan|C. jumlah guru|D. uniform sekolah",
+                    "2. Maklumat berikut berkaitan dengan kaedah penyelidikan sejarah. Kaedah Bertulis - Penelitian tentang penulisan catatan asal sesebuah kejadian sejarah. Dimanakah pengkaji sejarah boleh mendapatkan bahan sejarah tersebut?|A. Arkib|B. Makmal|C. Stadium|D. Sekolah",
+                    "3. Apakah yang akan berlaku jika kawasan tempat tinggal kotor dan dipenuhi sampah-sarap?|A. Penyebaran pelbagai penyakit|B. Menjejaskan keharmonian kaum|C. Menyebabkan kesesakan jalan raya|D. Menggalakkan kegiatan aktiviti pelancongan",
+                    "4. Dalam satu projek sejarah, kamu ditugaskan untuk menemubual seorang tokoh sukan. Apakah kaedah yang akan digunakan?|A. Lisan|B. Kajian|C. Arkeologi|D. Pandang dengar",
+                    "5. Maklumat berikut berkaitan dengan bentuk muka bumi X: Dijadikan kawasan jeti nelayan dan tempat tumpuan pelancong. Apakah bentuk muka bumi X?|A. Pesisir pantai|B. Pinggir sungai|C. Tanah pamah|D. Tanah tinggi",
+                    "6. Siapakah teraju utama sesebuah sekolah?|A. Guru besar|B. Guru-guru lelaki|C. Penolong Kanan Pentadbiran|D. Penolong Kanan Kokurikulum",
+                    "7. Mengapakah berlaku kepupusan haiwan pada Zaman Air Batu Akhir?|A. Perubahan suhu|B. Pembentukan sungai|C. Penghijrahan tempat|D. Petempatan baharu",
+                    "8. Gambar menunjukkan haiwan berupa harimau dengan gigi panjang melengkung pada Zaman Air Batu Akhir. Apakah haiwan tersebut?|A. Sloth|B. Mamot|C. Megaloceros|D. Harimau bertaring lengkung",
+                    "9. Bagaimanakah masyarakat zaman Neolitik menjalankan aktiviti perdagangan?|A. hutang|B. jual beli|C. pinjaman|D. tukar barang",
+                    "10. Zaman prasejarah manakah yang menggunakan peralatan daripada gangsa dan besi?|A. Mesolitik|B. Logam|C. Neolitik|D. Paleolitik"
+                ];
+                soalanA.forEach((item, index) => {
+                    let parts = item.split('|');
+                    document.write(`<div class="question"><p>${parts[0]}</p><div class="options">`);
+                    for(let i=1; i<=4; i++){
+                        // Tambah onclick untuk mainkan bunyi pop
+                        document.write(`<label><input type="radio" name="q${index+1}" value="${parts[i][0]}" onclick="playPopSound()"> ${parts[i]}</label>`);
+                    }
+                    document.write(`</div></div>`);
+                });
+            </script>
+
+            <h2>📝 Bahagian B: Subjektif Berstruktur</h2>
+            <div class="question">
+                <p>1. Tandakan jawapan yang betul berkenaan sejarah sekolah.</p>
+                <p>(a) Peristiwa perasmian bangunan baru sekolah juga termasuk dalam sejarah sekolah. 
+                <select onchange="playPopSound()"><option>Pilih</option><option>Betul</option><option>Salah</option></select></p>
+                <p>(b) Hari sukan tahunan merupakan peristiwa penting yang perlu dicatatkan dalam sejarah sekolah. 
+                <select onchange="playPopSound()"><option>Pilih</option><option>Betul</option><option>Salah</option></select></p>
+            </div>
+
+            <div class="question">
+                <p>2. Lengkapkan berkaitan kehidupan manusia Zaman Paleolitik (Pilihan: hutan, nomad, gua, batu, api, logam)</p>
+                <p>(a) Hidup secara: <input type="text" oninput="playTypingSound()"></p>
+                <p>(b) Tinggal di dalam: <input type="text" oninput="playTypingSound()"></p>
+                <p>(c) Peralatan daripada: <input type="text" oninput="playTypingSound()"></p>
+            </div>
+
+            <button type="button" class="btn-submit" onclick="submitQuiz()">Hantar Jawapan 🎉</button>
+        </form>
+    </div>
+
+    <!-- Modal Tahniah -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-box">
+            <h2>TAHNIAH! 🌟</h2>
+            <p>Hebat! Anda telah berjaya menjawab semua soalan. Sila tunjukkan markah kepada ibu bapa/guru.</p>
+            <button class="modal-btn" onclick="closeModal()">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        // --- SISTEM AUDIO (Web Audio API) ---
+        // Selamat digunakan, tidak perlukan fail MP3 luar
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        // Bunyi 'Pop' bila pilih jawapan (Radio button / Select)
+        function playPopSound() {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.1);
+            
+            gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
+        }
+
+        // Bunyi 'Ketuk' bila menaip (debounce supaya tak terlalu bising)
+        let typingTimer;
+        function playTypingSound() {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.05);
+            }, 50);
+        }
+
+        // Melodi Kemenangan (Apabila tekan Hantar)
+        function playVictorySound() {
+            initAudio();
+            const notes = [440, 554, 659, 880]; // A4, C#5, E5, A5
+            let startTime = audioCtx.currentTime;
+            
+            notes.forEach((freq, index) => {
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                osc.type = 'square';
+                osc.frequency.value = freq;
+                
+                gainNode.gain.setValueAtTime(0.1, startTime + (index * 0.1));
+                gainNode.gain.setTargetAtTime(0, startTime + (index * 0.1) + 0.1, 0.1);
+                
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                osc.start(startTime + (index * 0.1));
+                osc.stop(startTime + (index * 0.1) + 0.5);
+            });
+        }
+
+        // --- SISTEM HANTAR JAWAPAN & VISUAL ---
+        function submitQuiz() {
+            // Bunyi Melodi
+            playVictorySound();
+            
+            // Animasi Confetti 
+            var duration = 3000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ff6b6b', '#4ecdc4', '#ffe66d']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ff6b6b', '#4ecdc4', '#ffe66d']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+
+            // Tunjuk Modal Pop-up Tahniah
+            setTimeout(() => {
+                document.getElementById('successModal').style.display = 'flex';
+            }, 1000);
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
