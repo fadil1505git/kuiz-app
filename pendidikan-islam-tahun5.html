@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ms" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendidikan Islam Tahun 5 - Akhir Tahun</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-light: #10b981;
+            --accent: #f59e0b;
+            --bg: #ecfdf5;
+            --text: #1f2937;
+        }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #a7f3d0 0%, #fef3c7 100%);
+            color: var(--text);
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 850px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px dashed var(--primary);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            color: var(--primary);
+            font-size: 2.2em;
+            margin: 0 0 5px 0;
+            font-weight: 900;
+        }
+        .header p {
+            color: #6b7280;
+            margin: 0;
+            font-weight: bold;
+        }
+        .info-box {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .info-box input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .info-box input:focus {
+            border-color: var(--primary);
+        }
+        .section-title {
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .question-card {
+            background: white;
+            border-left: 5px solid var(--primary);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+        }
+        .jawi-text {
+            font-family: 'Amiri', serif;
+            font-size: 1.45em;
+            direction: rtl;
+            text-align: right;
+            line-height: 1.8;
+            color: #0f172a;
+        }
+        .rumi-hint {
+            font-size: 0.9em;
+            color: #64748b;
+            margin-top: 4px;
+            display: block;
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .options-grid label {
+            display: block;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .options-grid label:hover {
+            border-color: var(--primary);
+            background: #ecfdf5;
+        }
+        select, input[type="text"] {
+            padding: 10px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: 'Amiri', 'Nunito', sans-serif;
+            font-size: 1.1em;
+            margin-top: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            outline: none;
+        }
+        select:focus, input[type="text"]:focus {
+            border-color: var(--primary);
+        }
+        .btn-submit {
+            background: linear-gradient(45deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: 900;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 35px;
+            box-shadow: 0 8px 20px rgba(5, 150, 105, 0.35);
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-submit:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 25px rgba(5, 150, 105, 0.5);
+        }
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .nav-back:hover {
+            text-decoration: underline;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 420px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes pop {
+            0% { transform: scale(0.6); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="nav-back">⬅ Kembali ke Portal Utama</a>
+        <div class="header">
+            <h1>🕌 ڤنديديقن إسلام تاهون 5</h1>
+            <p>Pendidikan Islam Tahun 5 (Pentaksiran Akhir Tahun)</p>
+        </div>
+
+        <div class="info-box">
+            <input type="text" placeholder="🙋 Nama Murid" required>
+            <input type="text" placeholder="🏫 Kelas" required>
+        </div>
+
+        <form id="quizForm">
+            <!-- BAHAGIAN A -->
+            <div class="section-title">
+                <span>(A) سوايكن / Suaikan</span>
+                <span>5 Markah</span>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">1. الْإِنسَانَ فِي ...</p>
+                <select onchange="playPopSound()">
+                    <option value="">-- فيليه سمبوڠن اية --</option>
+                    <option value="1">أَحْسَنِ تَقْوِيمٍ</option>
+                    <option value="2">الْأَمِينِ</option>
+                    <option value="3">بِأَحْكَمِ الْحَاكِمِينَ</option>
+                    <option value="4">فَمَا يُكَذِّبُكَ بَعْدُ بِالدِّينِ</option>
+                    <option value="5">غَيْرُ مَمْنُونٍ</option>
+                </select>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">2. وَهَذَا الْبَلَدِ ...</p>
+                <select onchange="playPopSound()">
+                    <option value="">-- فيليه سمبوڠن اية --</option>
+                    <option value="2">الْأَمِينِ</option>
+                    <option value="1">أَحْسَنِ تَقْوِيمٍ</option>
+                    <option value="3">بِأَحْكَمِ الْحَاكِمِينَ</option>
+                    <option value="5">غَيْرُ مَمْنُونٍ</option>
+                </select>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">3. أَلَيْسَ اللَّهُ ...</p>
+                <select onchange="playPopSound()">
+                    <option value="">-- فيليه سمبوڠن اية --</option>
+                    <option value="3">بِأَحْكَمِ الْحَاكِمِينَ</option>
+                    <option value="1">أَحْسَنِ تَقْوِيمٍ</option>
+                    <option value="2">الْأَمِينِ</option>
+                    <option value="5">غَيْرُ مَمْنُونٍ</option>
+                </select>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">4. ... بِالدِّينِ</p>
+                <select onchange="playPopSound()">
+                    <option value="">-- فيليه سمبوڠن اية --</option>
+                    <option value="4">فَمَا يُكَذِّبُكَ بَعْدُ</option>
+                    <option value="1">أَحْسَنِ تَقْوِيمٍ</option>
+                    <option value="5">غَيْرُ مَمْنُونٍ</option>
+                </select>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">5. فَلَهُمْ أَجْرٌ ...</p>
+                <select onchange="playPopSound()">
+                    <option value="">-- فيليه سمبوڠن اية --</option>
+                    <option value="5">غَيْرُ مَمْنُونٍ</option>
+                    <option value="2">الْأَمِينِ</option>
+                    <option value="3">بِأَحْكَمِ الْحَاكِمِينَ</option>
+                </select>
+            </div>
+
+            <!-- BAHAGIAN B -->
+            <div class="section-title">
+                <span>(B) تنداكن (✔) قد اية سورة التين دان (✖) قد سباليقڽ</span>
+                <span>5 Markah</span>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">6. أَلَيْسَ اللَّهُ بِأَحْكَمِ الْحَاكِمِينَ</p>
+                <div class="options-grid">
+                    <label><input type="radio" name="b6" onclick="playPopSound()"> ✔ دري سورة التين</label>
+                    <label><input type="radio" name="b6" onclick="playPopSound()"> ✖ بوكن سورة التين</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">7. وَمَا أَدْرَاكَ مَا لَيْلَةُ الْقَدْرِ</p>
+                <div class="options-grid">
+                    <label><input type="radio" name="b7" onclick="playPopSound()"> ✔ دري سورة التين</label>
+                    <label><input type="radio" name="b7" onclick="playPopSound()"> ✖ بوكن سورة التين</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">8. إِنَّ الْإِنسَانَ لَفِي خُسْرٍ</p>
+                <div class="options-grid">
+                    <label><input type="radio" name="b8" onclick="playPopSound()"> ✔ دري سورة التين</label>
+                    <label><input type="radio" name="b8" onclick="playPopSound()"> ✖ بوكن سورة التين</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">9. سَلَامٌ هِيَ حَتَّىٰ مَطْلَعِ الْفَجْرِ</p>
+                <div class="options-grid">
+                    <label><input type="radio" name="b9" onclick="playPopSound()"> ✔ دري سورة التين</label>
+                    <label><input type="radio" name="b9" onclick="playPopSound()"> ✖ بوكن سورة التين</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">10. فَمَا يُكَذِّبُكَ بَعْدُ بِالدِّينِ</p>
+                <div class="options-grid">
+                    <label><input type="radio" name="b10" onclick="playPopSound()"> ✔ دري سورة التين</label>
+                    <label><input type="radio" name="b10" onclick="playPopSound()"> ✖ بوكن سورة التين</label>
+                </div>
+            </div>
+
+            <!-- BAHAGIAN C -->
+            <div class="section-title">
+                <span>(C) كفهمن سورة العصر</span>
+                <span>5 Markah</span>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">11. سورة اين دتورونكن د ...</p>
+                <span class="rumi-hint">Surah ini diturunkan di:</span>
+                <select onchange="playPopSound()">
+                    <option value="">-- فيليه جواڤن --</option>
+                    <option>مكة</option>
+                    <option>مدينة</option>
+                </select>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">12. سورة العصر مڠاندوڠي ... اية</p>
+                <span class="rumi-hint">Surah al-'Asr mengandungi berapa ayat:</span>
+                <select onchange="playPopSound()">
+                    <option value="">-- فيليه بيلاڠن اية --</option>
+                    <option>3</option>
+                    <option>4</option>
+                </select>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">13. سورة اين ممبينچڠكن كڤنتيڠن ...</p>
+                <span class="rumi-hint">Surah ini membincangkan kepentingan:</span>
+                <select onchange="playPopSound()">
+                    <option value="">-- فيليه جواڤن --</option>
+                    <option>ماس (Masa)</option>
+                    <option>بلاجر (Belajar)</option>
+                </select>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">14. سورة اين مروڤاكن سورة ك ... دالم القرءان</p>
+                <span class="rumi-hint">Surah al-'Asr merupakan surah ke berapa:</span>
+                <select onchange="playPopSound()">
+                    <option value="">-- فيليه نومبور سورة --</option>
+                    <option>103</option>
+                    <option>105</option>
+                </select>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">15. مقصود "وَالْعَصْرِ" اياله ...</p>
+                <span class="rumi-hint">Maksud perkataan Wal-'Asr:</span>
+                <select onchange="playPopSound()">
+                    <option value="">-- فيليه مقصود --</option>
+                    <option>دمي ماس (Demi masa)</option>
+                    <option>دمي القرءان (Demi al-Quran)</option>
+                </select>
+            </div>
+
+            <!-- BAHAGIAN D: TAJWID -->
+            <div class="section-title">
+                <span>(D) حكوم تجويد / Hukum Tajwid</span>
+                <span>5 Markah</span>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">16. مد صلة قصيرة (Mad Silah Qasirah)</p>
+                <select onchange="playPopSound()">
+                    <option value="">-- فيليه اية يڠ مڠاندوڠي حكوم اين --</option>
+                    <option>فَجَعَلَهُۥ غُثَآءً أَحْوَىٰ</option>
+                    <option>فَتْحًا مُّبِينًا</option>
+                    <option>طه</option>
+                    <option>ءَامَنَّا بِاللَّهِ</option>
+                    <option>مِّنَ النَّبِيِّـۧنَ</option>
+                </select>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">17. مد بدل (Mad Badal)</p>
+                <select onchange="playPopSound()">
+                    <option value="">-- فيليه اية يڠ مڠاندوڠي حكوم اين --</option>
+                    <option>ءَامَنَّا بِاللَّهِ</option>
+                    <option>فَجَعَلَهُۥ غُثَآءً أَحْوَىٰ</option>
+                    <option>طه</option>
+                    <option>مِّنَ النَّبِيِّـۧنَ</option>
+                </select>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">18. مد عوض (Mad 'Iwad)</p>
+                <select onchange="playPopSound()">
+                    <option value="">-- فيليه اية يڠ مڠاندوڠي حكوم اين --</option>
+                    <option>فَتْحًا مُّبِينًا</option>
+                    <option>طه</option>
+                    <option>ءَامَنَّا بِاللَّهِ</option>
+                </select>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">19. مد تمكين (Mad Tamkin)</p>
+                <select onchange="playPopSound()">
+                    <option value="">-- فيليه اية يڠ مڠاندوڠي حكوم اين --</option>
+                    <option>مِّنَ النَّبِيِّـۧنَ</option>
+                    <option>طه</option>
+                    <option>فَتْحًا مُّبِينًا</option>
+                </select>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">20. مد طبيعي (Mad Asli / Thobi'i)</p>
+                <select onchange="playPopSound()">
+                    <option value="">-- فيليه اية يڠ مڠاندوڠي حكوم اين --</option>
+                    <option>طه</option>
+                    <option>مِّنَ النَّبِيِّـۧنَ</option>
+                    <option>فَجَعَلَهُۥ غُثَآءً أَحْوَىٰ</option>
+                </select>
+            </div>
+
+            <!-- BAHAGIAN E: AKIDAH & SIHIR -->
+            <div class="section-title">
+                <span>(E) ڤرڽاتاءن سيحير (بتول / ساله)</span>
+                <span>5 Markah</span>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">26. سيحير اياله ايكتن ڤرساوداراءن.</p>
+                <div class="options-grid">
+                    <label><input type="radio" name="e26" onclick="playPopSound()"> بتول (Betul)</label>
+                    <label><input type="radio" name="e26" onclick="playPopSound()"> ساله (Salah)</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">27. ڤربواتن سيحير مڠاندوڠي عنصور شيريك.</p>
+                <div class="options-grid">
+                    <label><input type="radio" name="e27" onclick="playPopSound()"> بتول (Betul)</label>
+                    <label><input type="radio" name="e27" onclick="playPopSound()"> ساله (Salah)</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">28. كسن شيريك اياله منجادي راجين براوسها.</p>
+                <div class="options-grid">
+                    <label><input type="radio" name="e28" onclick="playPopSound()"> بتول (Betul)</label>
+                    <label><input type="radio" name="e28" onclick="playPopSound()"> ساله (Salah)</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">29. تيندقن منجاءوهي سيحير دغن مندالمي علمو اݢام.</p>
+                <div class="options-grid">
+                    <label><input type="radio" name="e29" onclick="playPopSound()"> بتول (Betul)</label>
+                    <label><input type="radio" name="e29" onclick="playPopSound()"> ساله (Salah)</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <p class="jawi-text">30. حكوم سيحير اداله مكروه.</p>
+                <div class="options-grid">
+                    <label><input type="radio" name="e30" onclick="playPopSound()"> بتول (Betul)</label>
+                    <label><input type="radio" name="e30" onclick="playPopSound()"> ساله (Salah)</label>
+                </div>
+            </div>
+
+            <button type="button" class="btn-submit" onclick="submitQuiz()">Hantar Jawapan 🎉 أرسل الإجابة</button>
+        </form>
+    </div>
+
+    <!-- Modal Tahniah -->
+    <div id="modal" class="modal">
+        <div class="modal-card">
+            <h2 style="color:var(--primary); font-size: 2.2em; margin-top:0;">بارك الله فيك! 🌟</h2>
+            <p style="font-size:1.15em; color:#4b5563; font-weight:bold;">Tahniah! Anda telah berjaya melengkapkan kertas soalan Pendidikan Islam Tahun 5.</p>
+            <button class="btn-submit" style="margin-top:20px; padding:12px 30px;" onclick="document.getElementById('modal').style.display='none'">Tutup & Semak</button>
+        </div>
+    </div>
+
+    <script>
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+        function initAudio() { if (!audioCtx) audioCtx = new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
+
+        function playPopSound() {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(450, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(650, audioCtx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.25, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.08);
+        }
+
+        function submitQuiz() {
+            initAudio();
+            const notes = [523, 659, 784, 1046];
+            let startTime = audioCtx.currentTime;
+            notes.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                osc.type = 'triangle'; osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.12, startTime + (i * 0.12));
+                gain.gain.setTargetAtTime(0, startTime + (i * 0.12) + 0.12, 0.12);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(startTime + (i * 0.12)); osc.stop(startTime + (i * 0.12) + 0.5);
+            });
+            var end = Date.now() + 3000;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#059669', '#10b981', '#f59e0b'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#059669', '#10b981', '#f59e0b'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+            setTimeout(() => document.getElementById('modal').style.display = 'flex', 800);
+        }
+    </script>
+</body>
+</html>
